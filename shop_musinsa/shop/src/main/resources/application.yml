@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: shop_musinsa
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop
+    username: postgres
+    password: 1004
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
