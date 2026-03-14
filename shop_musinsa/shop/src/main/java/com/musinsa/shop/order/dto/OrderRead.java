@@ -12,12 +12,14 @@ import java.util.List;
 @Setter
 @Builder
 public class OrderRead {
-
     private Integer id;
+    private Integer memberId;
+    private String memberName;
     private String name;
     private String address;
     private String payment;
     private Long amount;
+    private String status;
     private LocalDateTime createdAt;
     private List<ItemRead> items;
 }

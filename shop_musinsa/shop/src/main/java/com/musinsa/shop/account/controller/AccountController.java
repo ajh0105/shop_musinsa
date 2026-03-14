@@ -1,61 +1,144 @@
 package com.musinsa.shop.account.controller;
 
+import com.musinsa.shop.account.dto.AccountCheckResponse;
 import com.musinsa.shop.account.dto.AccountJoinRequest;
 import com.musinsa.shop.account.dto.AccountLoginRequest;
-import com.musinsa.shop.account.helper.AccountHelper;
+import com.musinsa.shop.common.util.SecurityUtil;
+import com.musinsa.shop.member.dto.MemberRead;
+import com.musinsa.shop.member.dto.MemberUpdateRequest;
+import com.musinsa.shop.member.entity.Member;
+import com.musinsa.shop.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/v1/api/account")
 @RequiredArgsConstructor
-@RequestMapping("/v1")
 public class AccountController {
 
-    private final AccountHelper accountHelper;
+    private final AuthenticationManager authenticationManager;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final SecurityUtil securityUtil;
 
-    @PostMapping("/api/account/join")
-    public ResponseEntity<?> join(@RequestBody AccountJoinRequest joinReq) {
-        //입력 값이 비어 있다면
-        if (!StringUtils.hasLength(joinReq.getName()) || !StringUtils.hasLength(joinReq.getLoginId())
-                || !StringUtils.hasLength(joinReq.getLoginPw())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    /** 회원가입 */
+    @PostMapping("/join")
+    public ResponseEntity<?> join(@RequestBody AccountJoinRequest req) {
+        if (!StringUtils.hasLength(req.getName()) || !StringUtils.hasLength(req.getLoginId())
+                || !StringUtils.hasLength(req.getLoginPw())) {
+            return ResponseEntity.badRequest().body("필수 항목을 모두 입력하세요.");
         }
-
-        accountHelper.join(joinReq);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (memberRepository.existsByLoginId(req.getLoginId())) {
+            return ResponseEntity.status(409).body("이미 사용 중인 이메일입니다.");
+        }
+        Member member = Member.builder()
+                .name(req.getName())
+                .loginId(req.getLoginId())
+                .loginPw(passwordEncoder.encode(req.getLoginPw()))
+                .role("ROLE_USER")
+                .grade("BRONZE")
+                .status("ACTIVE")
+                .build();
+        memberRepository.save(member);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/api/account/login")
-    public ResponseEntity<?> login(HttpServletRequest req, HttpServletResponse res,
-                                   @RequestBody AccountLoginRequest loginReq) {
-        //입력 값이 비어 있다면
-        if (!StringUtils.hasLength(loginReq.getLoginId()) || !StringUtils.hasLength(loginReq.getLoginPw())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    /** 로그인 */
+    @PostMapping("/login")
+    public ResponseEntity<?> login(HttpServletRequest request,
+                                   @RequestBody AccountLoginRequest req) {
+        if (!StringUtils.hasLength(req.getLoginId()) || !StringUtils.hasLength(req.getLoginPw())) {
+            return ResponseEntity.badRequest().build();
         }
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(req.getLoginId(), req.getLoginPw()));
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(auth);
+            SecurityContextHolder.setContext(context);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
 
-        String output = accountHelper.login(loginReq, req, res);
-
-        if (output == null) {
-            //로그인 실패 시
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Member member = memberRepository.findByLoginId(req.getLoginId()).orElseThrow();
+            return ResponseEntity.ok(new AccountCheckResponse(true, member.getLoginId(), member.getName(), member.getRole()));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
-
-        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
-    @GetMapping("/api/account/check")
-    public ResponseEntity<?> check(HttpServletRequest req) {
-        return new ResponseEntity<>(accountHelper.isLoggedId(req), HttpStatus.OK);
+    /** 로그인 상태 확인 */
+    @GetMapping("/check")
+    public ResponseEntity<?> check() {
+        Member member = securityUtil.getCurrentMember();
+        if (member == null) {
+            return ResponseEntity.ok(new AccountCheckResponse(false, null, null, null));
+        }
+        return ResponseEntity.ok(new AccountCheckResponse(true, member.getLoginId(), member.getName(), member.getRole()));
     }
 
-    @PostMapping("/api/account/logout")
-    public ResponseEntity<?> logout(HttpServletRequest req, HttpServletResponse res) {
-        accountHelper.logout(req, res);
-        return new ResponseEntity<>(HttpStatus.OK);
+    /** 로그아웃 */
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) session.invalidate();
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok().build();
+    }
+
+    /** 내 정보 조회 */
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
+        Member member = securityUtil.getCurrentMember();
+        if (member == null) return ResponseEntity.status(401).build();
+        return ResponseEntity.ok(MemberRead.from(member));
+    }
+
+    /** 내 정보 수정 */
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody MemberUpdateRequest req) {
+        Member member = securityUtil.getCurrentMember();
+        if (member == null) return ResponseEntity.status(401).build();
+
+        if (StringUtils.hasLength(req.getName())) member.setName(req.getName());
+        if (StringUtils.hasLength(req.getPhone())) member.setPhone(req.getPhone());
+        if (StringUtils.hasLength(req.getAddress())) member.setAddress(req.getAddress());
+
+        if (StringUtils.hasLength(req.getNewPw())) {
+            if (!passwordEncoder.matches(req.getCurrentPw(), member.getLoginPw())) {
+                return ResponseEntity.badRequest().body("현재 비밀번호가 올바르지 않습니다.");
+            }
+            member.setLoginPw(passwordEncoder.encode(req.getNewPw()));
+        }
+        memberRepository.save(member);
+        return ResponseEntity.ok(MemberRead.from(member));
+    }
+
+    /** 회원 탈퇴 */
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestParam String password, HttpServletRequest request) {
+        Member member = securityUtil.getCurrentMember();
+        if (member == null) return ResponseEntity.status(401).build();
+        if (!passwordEncoder.matches(password, member.getLoginPw())) {
+            return ResponseEntity.badRequest().body("비밀번호가 올바르지 않습니다.");
+        }
+        member.setStatus("WITHDRAWN");
+        memberRepository.save(member);
+        HttpSession session = request.getSession(false);
+        if (session != null) session.invalidate();
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok().build();
     }
 }

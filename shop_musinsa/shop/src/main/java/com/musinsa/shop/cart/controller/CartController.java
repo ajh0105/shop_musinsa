@@ -1,12 +1,11 @@
 package com.musinsa.shop.cart.controller;
 
-import com.musinsa.shop.account.helper.AccountHelper;
 import com.musinsa.shop.cart.dto.CartRead;
 import com.musinsa.shop.cart.dto.CartRequest;
 import com.musinsa.shop.cart.service.CartService;
+import com.musinsa.shop.common.util.SecurityUtil;
 import com.musinsa.shop.item.dto.ItemRead;
 import com.musinsa.shop.item.service.ItemService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,46 +20,38 @@ public class CartController {
 
     private final CartService cartService;
     private final ItemService itemService;
-    private final AccountHelper accountHelper;
+    private final SecurityUtil securityUtil;
 
     @GetMapping("/api/cart/items")
-    public ResponseEntity<?> readAll(HttpServletRequest req) {
-        // 로그인 회원 아이디
-        Integer memberId = accountHelper.getMemberId(req);
+    public ResponseEntity<?> readAll() {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
 
-        // 장바구니 목록 조회
         List<CartRead> carts = cartService.findAll(memberId);
-
-        // 장바구니 안에 있는 상품 아이디로 상품을 조회
         List<Integer> itemIds = carts.stream().map(CartRead::getItemId).toList();
         List<ItemRead> items = itemService.findAll(itemIds);
-
-        return new ResponseEntity<>(items, HttpStatus.OK);
+        return ResponseEntity.ok(items);
     }
 
     @PostMapping("/api/carts")
-    public ResponseEntity<?> push(HttpServletRequest req, @RequestBody CartRequest cartReq) {
+    public ResponseEntity<?> push(@RequestBody CartRequest cartReq) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
 
-        // 로그인 회원 아이디
-        Integer memberId = accountHelper.getMemberId(req);
-
-        // 장바구니 데이터 조회(특정 상품)
-        CartRead cart = cartService.find(memberId, cartReq.getItemId());
-
-        // 장바구니 데이터가 없다면
-        if (cart == null) {
+        CartRead existing = cartService.find(memberId, cartReq.getItemId());
+        if (existing == null) {
             cartService.save(cartReq.toEntity(memberId));
+        } else {
+            return ResponseEntity.status(409).body("이미 장바구니에 담긴 상품입니다.");
         }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/api/cart/item/{itemId}")
-    public ResponseEntity<?> remove(HttpServletRequest req, @PathVariable("itemId") Integer itemId) {
-        // 로그인 회원 아이디
-        Integer memberId = accountHelper.getMemberId(req);
-
+    public ResponseEntity<?> remove(@PathVariable Integer itemId) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
         cartService.remove(memberId, itemId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

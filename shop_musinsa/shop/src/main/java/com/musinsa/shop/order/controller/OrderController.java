@@ -1,62 +1,62 @@
 package com.musinsa.shop.order.controller;
 
-import com.musinsa.shop.account.helper.AccountHelper;
+import com.musinsa.shop.common.util.SecurityUtil;
 import com.musinsa.shop.order.dto.OrderRead;
 import com.musinsa.shop.order.dto.OrderRequest;
+import com.musinsa.shop.order.entity.Order;
+import com.musinsa.shop.order.repository.OrderRepository;
 import com.musinsa.shop.order.service.OrderService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final AccountHelper accountHelper;
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
+    private final SecurityUtil securityUtil;
 
-    @GetMapping("/api/orders")
-    public ResponseEntity<?> readAll(HttpServletRequest req) {
-        // 로그인 회원 아이디
-        Integer memberId = accountHelper.getMemberId(req);
-
-        // 주문 목록
+    @GetMapping
+    public ResponseEntity<?> readAll() {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
         List<OrderRead> orders = orderService.findAll(memberId);
-
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("/api/orders/{id}")
-    public ResponseEntity<?> read(HttpServletRequest req, @PathVariable Integer id) {
-        // 로그인 회원 아이디
-        Integer memberId = accountHelper.getMemberId(req);
-
-        // 주문 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<?> read(@PathVariable Integer id) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
         OrderRead order = orderService.find(id, memberId);
-
-        if (order == null) {    //주문 데이터가 없는 경우
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        return order != null ? ResponseEntity.ok(order) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/api/orders")
-    public ResponseEntity<?> add(HttpServletRequest req, @RequestBody OrderRequest orderReq) {
-
-        // 로그인 회원 아이디
-        Integer memberId = accountHelper.getMemberId(req);
-
-        // 주문 입력
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody OrderRequest orderReq) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
         orderService.order(orderReq, memberId);
+        return ResponseEntity.ok().build();
+    }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+    /** 주문 취소 */
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<?> cancel(@PathVariable Integer id) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
+        Order order = orderRepository.findByIdAndMemberId(id, memberId).orElse(null);
+        if (order == null) return ResponseEntity.notFound().build();
+        if ("CANCELLED".equals(order.getStatus())) {
+            return ResponseEntity.badRequest().body("이미 취소된 주문입니다.");
+        }
+        order.setStatus("CANCELLED");
+        orderRepository.save(order);
+        return ResponseEntity.ok().build();
     }
 }
-
-

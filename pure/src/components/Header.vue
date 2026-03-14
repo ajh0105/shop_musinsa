@@ -6,7 +6,8 @@
         <span class="header-notice">무신사 신규 회원가입 시 10% 쿠폰 증정</span>
         <div class="header-top-actions">
           <template v-if="isLoggedIn">
-            <span class="header-top-user">{{ loginId }}</span>
+            <span class="header-top-user">{{ userName || loginId }}</span>
+            <RouterLink v-if="isAdmin()" to="/admin" class="btn-text admin-link">관리자</RouterLink>
             <button class="btn-text" @click="handleLogout">로그아웃</button>
           </template>
           <template v-else>
@@ -27,7 +28,7 @@
 
         <!-- 검색 -->
         <div class="header-search">
-          <form class="search-form" @submit.prevent>
+          <form class="search-form" @submit.prevent="handleSearch">
             <input
               v-model="searchQuery"
               type="search"
@@ -86,9 +87,15 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 
-const { isLoggedIn, loginId, clearLogin } = useAuth()
+const { isLoggedIn, loginId, userName, role, isAdmin, clearLogin } = useAuth()
 const router = useRouter()
 const searchQuery = ref('')
+
+function handleSearch() {
+  if (searchQuery.value.trim()) {
+    router.push({ path: '/category/ALL', query: { keyword: searchQuery.value.trim() } })
+  }
+}
 
 const categories = [
   { name: 'OUTER', label: 'OUTER' },

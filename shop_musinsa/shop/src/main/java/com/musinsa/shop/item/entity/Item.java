@@ -2,10 +2,7 @@ package com.musinsa.shop.item.entity;
 
 import com.musinsa.shop.item.dto.ItemRead;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "items")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,14 +24,17 @@ public class Item {
     @Column(nullable = false, length = 50)
     private String brand;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(length = 30)
     private String category;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 255)
     private String imgPath;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Column(nullable = false)
     private Integer price;
@@ -54,7 +55,6 @@ public class Item {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    //상품 조회 DTO로 변환
     public ItemRead toRead() {
         return ItemRead.builder()
                 .id(id)
@@ -62,12 +62,14 @@ public class Item {
                 .name(name)
                 .category(category)
                 .imgPath(imgPath)
+                .description(description)
                 .price(price)
                 .discountPer(discountPer)
-                // 비즈니스 로직 추가
                 .salePrice(price * (100 - discountPer) / 100)
+                .stockCount(stockCount)
                 .viewCount(viewCount)
                 .isSoldOut(stockCount != null && stockCount <= 0)
+                .createdAt(createdAt)
                 .build();
     }
 }

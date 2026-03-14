@@ -71,11 +71,39 @@
       </div>
     </section>
 
-    <!-- 히트 상품 -->
+    <!-- 신상품 -->
     <section class="hit-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">히트 상품</h2>
+          <h2 class="section-title">신상품</h2>
+          <p class="section-sub">새로 입고된 아이템</p>
+        </div>
+        <div v-if="newLoading" class="loading-box"><div class="spinner"></div></div>
+        <div v-else class="product-grid">
+          <RouterLink v-for="item in newItems" :key="item.id" :to="`/product/${item.id}`" class="product-card">
+            <div class="product-img-wrap">
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <span class="product-badge product-badge--new">NEW</span>
+            </div>
+            <div class="product-info">
+              <p class="product-brand">{{ item.brand }}</p>
+              <p class="product-name">{{ item.name }}</p>
+              <div class="product-price-wrap">
+                <span v-if="item.discountPer > 0" class="product-price-original">{{ formatPrice(item.price) }}</span>
+                <span class="product-price">{{ formatPrice(item.salePrice) }}</span>
+                <span v-if="item.discountPer > 0" class="product-discount">{{ item.discountPer }}%</span>
+              </div>
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- 베스트 상품 -->
+    <section class="hit-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">베스트</h2>
           <p class="section-sub">지금 가장 인기 있는 아이템</p>
         </div>
         <div v-if="loading" class="loading-box">
@@ -85,7 +113,7 @@
           <RouterLink
             v-for="item in hitItems"
             :key="item.id"
-            :to="`/category/${item.category}`"
+            :to="`/product/${item.id}`"
             class="product-card"
           >
             <div class="product-img-wrap">
@@ -107,7 +135,35 @@
       </div>
     </section>
 
-    <!-- 카테고리별 추천 섹션 행 -->
+    <!-- 추천 상품 -->
+    <section class="hit-section" style="background:#f8f8f8;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">추천 상품</h2>
+          <p class="section-sub">할인율이 높은 인기 아이템</p>
+        </div>
+        <div v-if="recLoading" class="loading-box"><div class="spinner"></div></div>
+        <div v-else class="product-grid">
+          <RouterLink v-for="item in recItems" :key="item.id" :to="`/product/${item.id}`" class="product-card">
+            <div class="product-img-wrap">
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
+            </div>
+            <div class="product-info">
+              <p class="product-brand">{{ item.brand }}</p>
+              <p class="product-name">{{ item.name }}</p>
+              <div class="product-price-wrap">
+                <span v-if="item.discountPer > 0" class="product-price-original">{{ formatPrice(item.price) }}</span>
+                <span class="product-price">{{ formatPrice(item.salePrice) }}</span>
+                <span v-if="item.discountPer > 0" class="product-discount">{{ item.discountPer }}%</span>
+              </div>
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- 아우터 추천 섹션 행 -->
     <section class="category-row-section">
       <div class="container">
         <div class="section-header">
@@ -119,7 +175,7 @@
           <RouterLink
             v-for="item in outerItems"
             :key="item.id"
-            :to="`/category/OUTER`"
+            :to="`/product/${item.id}`"
             class="product-card product-card--sm"
           >
             <div class="product-img-wrap">
@@ -167,7 +223,7 @@
           <RouterLink
             v-for="item in shoesItems"
             :key="item.id"
-            :to="`/category/SHOES`"
+            :to="`/product/${item.id}`"
             class="product-card product-card--sm"
           >
             <div class="product-img-wrap">
@@ -264,9 +320,13 @@ const quickCategories = [
 ]
 
 const loading = ref(false)
+const newLoading = ref(false)
+const recLoading = ref(false)
 const outerLoading = ref(false)
 const shoesLoading = ref(false)
 const hitItems = ref([])
+const newItems = ref([])
+const recItems = ref([])
 const outerItems = ref([])
 const shoesItems = ref([])
 
@@ -287,13 +347,37 @@ function goToSlide(i) {
 async function fetchItems() {
   loading.value = true
   try {
-    const res = await fetch('/v1/api/items', { credentials: 'include' })
+    const res = await fetch('/v1/api/items?sort=best')
     const data = await res.json()
-    hitItems.value = [...data].sort((a, b) => b.viewCount - a.viewCount).slice(0, 8)
+    hitItems.value = data.slice(0, 4)
   } catch (e) {
     console.error('상품 조회 실패', e)
   } finally {
     loading.value = false
+  }
+}
+
+async function fetchNew() {
+  newLoading.value = true
+  try {
+    const res = await fetch('/v1/api/items?sort=new')
+    newItems.value = await res.json()
+  } catch (e) {
+    console.error(e)
+  } finally {
+    newLoading.value = false
+  }
+}
+
+async function fetchRecommend() {
+  recLoading.value = true
+  try {
+    const res = await fetch('/v1/api/items?sort=recommend')
+    recItems.value = await res.json()
+  } catch (e) {
+    console.error(e)
+  } finally {
+    recLoading.value = false
   }
 }
 
@@ -325,6 +409,8 @@ async function fetchShoes() {
 
 onMounted(() => {
   fetchItems()
+  fetchNew()
+  fetchRecommend()
   fetchOuter()
   fetchShoes()
   autoSlide = setInterval(nextSlide, 4000)

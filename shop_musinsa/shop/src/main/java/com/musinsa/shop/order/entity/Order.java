@@ -2,14 +2,18 @@ package com.musinsa.shop.order.entity;
 
 import com.musinsa.shop.order.dto.OrderRead;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "orders")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order {
 
     @Id
@@ -34,23 +38,15 @@ public class Order {
     @Column(nullable = false)
     private Long amount;
 
+    /** PAID / CANCELLED */
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private String status = "PAID";
+
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public Order() {
-    }
-
-    public Order(Integer memberId, String name, String address, String payment, String cardNumber, Long amount) {
-        this.memberId = memberId;
-        this.name = name;
-        this.address = address;
-        this.payment = payment;
-        this.cardNumber = cardNumber;
-        this.amount = amount;
-    }
-
-    //주문 조회 DTO로 변환
     public OrderRead toRead() {
         return OrderRead.builder()
                 .id(id)
@@ -58,6 +54,7 @@ public class Order {
                 .address(address)
                 .payment(payment)
                 .amount(amount)
+                .status(status)
                 .createdAt(createdAt)
                 .build();
     }

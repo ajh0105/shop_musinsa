@@ -49,7 +49,7 @@
           v-for="item in pagedItems"
           :key="item.id"
           class="product-card"
-          @click="addToCart(item)"
+          @click="$router.push('/product/' + item.id)"
         >
           <div class="product-img-wrap">
             <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
@@ -146,7 +146,10 @@ const sortOptions = [
   { value: 'discount', label: '할인율순' },
 ]
 
-const categoryLabel = computed(() => categoryLabels[route.params.name] || route.params.name)
+const categoryLabel = computed(() => {
+  if (route.query.keyword) return `"${route.query.keyword}" 검색 결과`
+  return categoryLabels[route.params.name] || route.params.name
+})
 
 const sortedItems = computed(() => {
   const arr = [...items.value]
@@ -204,13 +207,22 @@ async function addToCart(item) {
   }
 }
 
-async function fetchItems(category) {
+async function fetchItems() {
   loading.value = true
   currentPage.value = 1
   items.value = []
+  const category = route.params.name
+  const keyword = route.query.keyword
   try {
-    const url = `/v1/api/items${category ? `?category=${category}` : ''}`
-    const res = await fetch(url, { credentials: 'include' })
+    let url
+    if (keyword) {
+      url = `/v1/api/items?keyword=${encodeURIComponent(keyword)}`
+    } else if (category && category !== 'ALL') {
+      url = `/v1/api/items?category=${category}`
+    } else {
+      url = '/v1/api/items'
+    }
+    const res = await fetch(url)
     items.value = await res.json()
   } catch (e) {
     console.error('상품 조회 실패', e)
@@ -219,7 +231,7 @@ async function fetchItems(category) {
   }
 }
 
-watch(() => route.params.name, (name) => {
-  fetchItems(name)
+watch([() => route.params.name, () => route.query.keyword], () => {
+  fetchItems()
 }, { immediate: true })
 </script>
