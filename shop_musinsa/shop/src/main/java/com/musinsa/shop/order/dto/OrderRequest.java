@@ -17,8 +17,14 @@ public class OrderRequest {
     private Long amount;
     private List<Integer> itemIds;
 
-    // 엔티티 객체로 변환
     public Order toEntity(Integer memberId) {
-        return new Order(memberId, name, address, payment, cardNumber, amount);
+        return Order.builder()
+                .memberId(memberId)
+                .name(name)
+                .address(address)
+                .payment(payment)
+                .cardNumber(cardNumber)
+                .amount(amount)
+                .build();
     }
 }
