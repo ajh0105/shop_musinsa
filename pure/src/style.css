@@ -354,6 +354,32 @@ input, select, textarea { font-family: inherit; }
   margin-bottom: 28px;
   line-height: 1.6;
 }
+.banner-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.banner-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 3px 9px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.banner-badge--new  { background: #4ade80; color: #052e16; }
+.banner-badge--hot  { background: var(--color-sale); color: #fff; }
+.banner-badge--sale { background: #facc15; color: #422006; }
+.banner-badge--pick { background: #818cf8; color: #fff; }
+.banner-highlight {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.5px;
+}
+
+.banner-desc { white-space: pre-line; }
+
 .banner-btn {
   display: inline-block;
   padding: 12px 28px;

@@ -14,6 +14,10 @@
             :style="{ background: banner.bg }"
           >
             <div class="banner-content">
+              <div class="banner-badges">
+                <span class="banner-badge" :class="`banner-badge--${banner.badge?.toLowerCase()}`">{{ banner.badge }}</span>
+                <span class="banner-highlight">{{ banner.highlight }}</span>
+              </div>
               <p class="banner-sub">{{ banner.sub }}</p>
               <h2 class="banner-title">{{ banner.title }}</h2>
               <p class="banner-desc">{{ banner.desc }}</p>
@@ -193,40 +197,59 @@ let autoSlide = null
 
 const banners = [
   {
-    bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-    sub: '2025 S/S COLLECTION',
+    bg: 'linear-gradient(135deg, #0a0a0a 0%, #1c1c2e 60%, #252545 100%)',
+    sub: '2025 S/S NEW COLLECTION',
     title: '봄을 입다,\n무신사 스탠다드',
-    desc: '베이직부터 트렌디까지, 합리적인 가격의 데일리 룩',
-    cta: '컬렉션 보러가기',
+    desc: '헤비 코튼부터 린넨 블렌드까지\n합리적인 가격의 일상 필수 아이템',
+    cta: '상의 컬렉션 보러가기',
     link: '/category/TOP',
-    img: 'https://picsum.photos/seed/banner1/600/400'
+    badge: 'NEW',
+    highlight: '최대 30% 쿠폰',
+    img: 'https://picsum.photos/seed/bnr001/500/620'
   },
   {
-    bg: 'linear-gradient(135deg, #0f3460 0%, #533483 100%)',
-    sub: 'SNEAKER DROP',
+    bg: 'linear-gradient(135deg, #0f0f1a 0%, #1a1035 60%, #2a1a4a 100%)',
+    sub: '2025 SNEAKER DROP',
     title: '이번 시즌\n필수 스니커즈',
-    desc: '나이키, 아디다스, 뉴발란스 신상 입고',
-    cta: '신발 보러가기',
+    desc: '나이키 덩크, 아디다스 삼바, 뉴발란스 990\n지금 바로 만나보세요',
+    cta: '신발 전체보기',
     link: '/category/SHOES',
-    img: 'https://picsum.photos/seed/banner2/600/400'
+    badge: 'HOT',
+    highlight: '인기 스니커즈 총집합',
+    img: 'https://picsum.photos/seed/bnr002/500/620'
   },
   {
-    bg: 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)',
-    sub: 'OUTLET SALE',
+    bg: 'linear-gradient(135deg, #1a0a0a 0%, #2d1010 60%, #3d1515 100%)',
+    sub: 'OUTLET SPECIAL SALE',
     title: '최대 50% OFF\n아울렛 특가',
-    desc: '인기 브랜드 시즌 오프 & 이월 상품 할인',
-    cta: '아울렛 보러가기',
+    desc: '노스페이스·나이키·아디다스 시즌 오프\n이월 상품 한정 수량 특가 판매',
+    cta: '아울렛 전체보기',
     link: '/category/OUTLET',
-    img: 'https://picsum.photos/seed/banner3/600/400'
+    badge: 'SALE',
+    highlight: '최대 50% 할인',
+    img: 'https://picsum.photos/seed/bnr003/500/620'
   },
   {
-    bg: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%)',
-    sub: 'NEW ARRIVALS',
-    title: '지금 떠오르는\n스트리트 브랜드',
-    desc: '커버낫, 아더에러, 칼하트 신상품 업데이트',
-    cta: '신상품 보러가기',
+    bg: 'linear-gradient(135deg, #0a1a0f 0%, #102a18 60%, #1a3a24 100%)',
+    sub: 'STREET BRAND PICK',
+    title: '지금 뜨는\n스트리트 브랜드',
+    desc: '커버낫, 아더에러, 칼하트, 브레인데드\n국내외 스트리트 씬의 핵심 아이템',
+    cta: '아우터 보러가기',
     link: '/category/OUTER',
-    img: 'https://picsum.photos/seed/banner4/600/400'
+    badge: 'PICK',
+    highlight: '에디터 큐레이션',
+    img: 'https://picsum.photos/seed/bnr004/500/620'
+  },
+  {
+    bg: 'linear-gradient(135deg, #1a1205 0%, #2a1e08 60%, #3a2a0e 100%)',
+    sub: 'ACCESSORY SEASON',
+    title: '완성하는 한 가지\n악세사리 컬렉션',
+    desc: 'MLB 볼캡, 뉴에라 피티드, 무신사 스탠다드 삭스\n데일리 룩의 마무리',
+    cta: '악세사리 보러가기',
+    link: '/category/ACC',
+    badge: 'NEW',
+    highlight: '시즌 신상 대거 입고',
+    img: 'https://picsum.photos/seed/bnr005/500/620'
   }
 ]
 
