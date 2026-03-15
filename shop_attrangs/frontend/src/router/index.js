@@ -6,6 +6,8 @@ import LoginView from '../views/LoginView.vue'
 import JoinView from '../views/JoinView.vue'
 import CartView from '../views/CartView.vue'
 import WishlistView from '../views/WishlistView.vue'
+import CheckoutView from '../views/CheckoutView.vue'
+import MyPageView from '../views/MyPageView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,7 +18,9 @@ const router = createRouter({
     { path: '/cart', name: 'cart', component: CartView },
     { path: '/wishlist', name: 'wishlist', component: WishlistView },
     { path: '/login', name: 'login', component: LoginView },
-    { path: '/join', name: 'join', component: JoinView }
+    { path: '/join', name: 'join', component: JoinView },
+    { path: '/checkout', name: 'checkout', component: CheckoutView },
+    { path: '/mypage', name: 'mypage', component: MyPageView }
   ]
 })
 

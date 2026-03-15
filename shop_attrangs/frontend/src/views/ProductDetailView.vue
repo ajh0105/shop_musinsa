@@ -7,7 +7,10 @@
         <p class="detail-brand">{{ item.brand }} | {{ item.category }}</p>
         <p class="detail-price">{{ Number(item.salePrice ?? item.price).toLocaleString() }}원</p>
         <p class="detail-desc">{{ item.description || '상품 설명이 없습니다.' }}</p>
-        <button class="detail-btn" @click="addToCart">장바구니 담기</button>
+        <div class="detail-actions">
+          <button class="detail-btn btn-cart" @click="addToCart">장바구니 담기</button>
+          <button class="detail-btn btn-buy" @click="buyNow">바로 구매</button>
+        </div>
       </div>
     </section>
 
@@ -39,11 +42,12 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from '../api'
 import { MOCK_ITEMS } from '../data/mockItems'
 
 const route = useRoute()
+const router = useRouter()
 const item = ref(null)
 const reviews = ref([])
 const qna = ref([])
@@ -83,5 +87,22 @@ async function addToCart() {
   }
 }
 
+function buyNow() {
+  if (!item.value) return
+  router.push({ path: '/checkout', query: { items: String(item.value.id) } })
+}
+
 onMounted(loadItem)
 </script>
+
+<style scoped>
+.detail-actions { display: flex; gap: 12px; margin-top: 16px; }
+.btn-cart {
+  flex: 1; padding: 13px; border: 1px solid #111; border-radius: 8px;
+  background: #fff; color: #111; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn-buy {
+  flex: 1; padding: 13px; border: none; border-radius: 8px;
+  background: #111; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+</style>

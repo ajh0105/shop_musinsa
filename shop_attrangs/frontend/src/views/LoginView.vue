@@ -13,15 +13,17 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../api'
+import { useAuth } from '../composables/useAuth.js'
 
 const router = useRouter()
+const { setLogin } = useAuth()
 const loginId = ref('')
 const loginPw = ref('')
 
 async function submit() {
   try {
-    await api.post('/account/login', { loginId: loginId.value, loginPw: loginPw.value })
-    alert('로그인되었습니다.')
+    const { data } = await api.post('/account/login', { loginId: loginId.value, loginPw: loginPw.value })
+    setLogin({ loginId: data.loginId, name: data.name, role: data.role })
     router.push('/')
   } catch (e) {
     alert(String(e?.response?.data || '로그인 실패'))
