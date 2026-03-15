@@ -40,7 +40,7 @@
 
     <!-- 상품 등록/수정 모달 -->
     <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
-      <div class="modal-box modal-lg">
+      <div class="modal modal-lg">
         <h3>{{ editTarget ? '상품 수정' : '상품 등록' }}</h3>
         <form @submit.prevent="submitProduct">
           <div class="form-row">
@@ -90,7 +90,9 @@
       </div>
     </div>
 
-    <div v-if="toast" class="toast-msg">{{ toast }}</div>
+    <Transition name="toast">
+      <div v-if="toast" class="toast">{{ toast }}</div>
+    </Transition>
   </div>
 </template>
 
