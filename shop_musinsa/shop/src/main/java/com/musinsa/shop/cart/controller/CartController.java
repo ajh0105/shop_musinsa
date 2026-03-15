@@ -1,5 +1,6 @@
 package com.musinsa.shop.cart.controller;
 
+import com.musinsa.shop.cart.dto.CartItemResponse;
 import com.musinsa.shop.cart.dto.CartRead;
 import com.musinsa.shop.cart.dto.CartRequest;
 import com.musinsa.shop.cart.service.CartService;
@@ -7,11 +8,12 @@ import com.musinsa.shop.common.util.SecurityUtil;
 import com.musinsa.shop.item.dto.ItemRead;
 import com.musinsa.shop.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1")
@@ -30,7 +32,19 @@ public class CartController {
         List<CartRead> carts = cartService.findAll(memberId);
         List<Integer> itemIds = carts.stream().map(CartRead::getItemId).toList();
         List<ItemRead> items = itemService.findAll(itemIds);
-        return ResponseEntity.ok(items);
+
+        Map<Integer, ItemRead> itemMap = items.stream()
+                .collect(Collectors.toMap(ItemRead::getId, i -> i));
+
+        List<CartItemResponse> response = carts.stream()
+                .map(c -> CartItemResponse.builder()
+                        .id(c.getId())
+                        .itemId(c.getItemId())
+                        .item(itemMap.get(c.getItemId()))
+                        .build())
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/api/carts")

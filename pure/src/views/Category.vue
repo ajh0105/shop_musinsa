@@ -196,7 +196,7 @@ async function addToCart(item) {
       body: JSON.stringify({ itemId: item.id })
     })
     if (res.ok) {
-      showToast(`${item.name}이(가) 장바구니에 담겼습니다.`)
+      showToast('장바구니에 추가되었습니다.')
     } else if (res.status === 409) {
       showToast('이미 장바구니에 담긴 상품입니다.')
     } else {

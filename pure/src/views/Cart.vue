@@ -180,18 +180,8 @@ async function fetchCart() {
   try {
     const res = await fetch('/v1/api/cart/items', { credentials: 'include' })
     if (!res.ok) { cartItems.value = []; return }
-    const cartData = await res.json()
-
-    // 각 cart item에 상품 정보 붙이기
-    const itemIds = cartData.map(c => c.itemId)
-    if (itemIds.length === 0) { cartItems.value = []; return }
-
-    const itemsRes = await fetch('/v1/api/items', { credentials: 'include' })
-    const allItems = await itemsRes.json()
-    const itemMap = Object.fromEntries(allItems.map(i => [i.id, i]))
-
-    cartItems.value = cartData.map(c => ({ ...c, item: itemMap[c.itemId] }))
-    selectedItems.value = cartData.map(c => c.itemId)
+    cartItems.value = await res.json()
+    selectedItems.value = cartItems.value.map(c => c.itemId)
     allSelected.value = true
   } catch (e) {
     console.error(e)
