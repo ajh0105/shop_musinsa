@@ -6,6 +6,7 @@ import Register from '../views/Register.vue'
 import Cart from '../views/Cart.vue'
 import MyPage from '../views/MyPage.vue'
 import ProductDetail from '../views/ProductDetail.vue'
+import Checkout from '../views/Checkout.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/cart', component: Cart },
   { path: '/mypage', component: MyPage, meta: { requiresAuth: true } },
+  { path: '/checkout', component: Checkout, meta: { requiresAuth: true } },
 
   // Admin routes
   {

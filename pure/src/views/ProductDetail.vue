@@ -154,59 +154,26 @@
       </div>
     </div>
 
-    <!-- 주문 모달 -->
-    <div v-if="showOrderModal" class="modal-overlay" @click.self="showOrderModal = false">
-      <div class="modal-box">
-        <h3>주문하기</h3>
-        <div class="form-group">
-          <label class="form-label">받는 분 이름</label>
-          <input v-model="orderForm.name" class="form-input" placeholder="이름" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">배송 주소</label>
-          <input v-model="orderForm.address" class="form-input" placeholder="주소" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">결제 수단</label>
-          <select v-model="orderForm.payment" class="form-input">
-            <option value="CARD">신용카드</option>
-            <option value="KAKAO">카카오페이</option>
-            <option value="NAVER">네이버페이</option>
-            <option value="TOSS">토스페이</option>
-          </select>
-        </div>
-        <div v-if="orderForm.payment === 'CARD'" class="form-group">
-          <label class="form-label">카드 번호</label>
-          <input v-model="orderForm.cardNumber" class="form-input" placeholder="0000-0000-0000-0000" maxlength="19" />
-        </div>
-        <div class="order-summary">
-          <p>상품: {{ item.name }}</p>
-          <p>수량: {{ qty }}개</p>
-          <p class="order-total">결제금액: <strong>{{ (item.salePrice * qty).toLocaleString() }}원</strong></p>
-        </div>
-        <div class="modal-actions">
-          <button class="btn-cancel" @click="showOrderModal = false">취소</button>
-          <button class="btn-confirm" @click="submitOrder">결제하기</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 토스트 -->
-    <div v-if="toast" class="toast-msg">{{ toast }}</div>
   </div>
 
   <div v-else class="loading-page">
     <p v-if="notFound">상품을 찾을 수 없습니다.</p>
     <p v-else>로딩 중...</p>
   </div>
+
+  <!-- 토스트 -->
+  <Transition name="toast">
+    <div v-if="toast" class="toast">{{ toast }}</div>
+  </Transition>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 
 const route = useRoute()
+const router = useRouter()
 const { isLoggedIn } = useAuth()
 
 const item = ref(null)
@@ -217,7 +184,6 @@ const activeTab = ref('desc')
 const qty = ref(1)
 const notFound = ref(false)
 const toast = ref('')
-const showOrderModal = ref(false)
 const currentMemberId = ref(null)
 
 const tabs = [
@@ -228,7 +194,6 @@ const tabs = [
 
 const reviewForm = ref({ rating: 5, content: '' })
 const qnaForm = ref({ title: '', content: '', isSecret: false })
-const orderForm = ref({ name: '', address: '', payment: 'CARD', cardNumber: '' })
 
 async function loadItem(id) {
   try {
@@ -280,37 +245,21 @@ async function addToCart() {
     credentials: 'include',
     body: JSON.stringify({ itemId: item.value.id })
   })
-  if (res.ok) showToast('장바구니에 추가되었습니다.')
-  else if (res.status === 409) showToast('이미 장바구니에 있습니다.')
-  else showToast('오류가 발생했습니다.')
+  if (res.ok) {
+    alert('장바구니에 추가되었습니다.')
+    showToast('장바구니에 추가되었습니다.')
+  } else if (res.status === 409) {
+    showToast('이미 장바구니에 있습니다.')
+  } else {
+    showToast('오류가 발생했습니다.')
+  }
 }
 
 function openOrderModal() {
   if (!isLoggedIn.value) { showToast('로그인이 필요합니다.'); return }
-  showOrderModal.value = true
+  router.push({ path: '/checkout', query: { itemId: item.value.id, qty: qty.value } })
 }
 
-async function submitOrder() {
-  if (!orderForm.value.name || !orderForm.value.address) {
-    showToast('이름과 주소를 입력해주세요.'); return
-  }
-  const res = await fetch('/v1/api/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify({
-      itemIds: [item.value.id],
-      name: orderForm.value.name,
-      address: orderForm.value.address,
-      payment: orderForm.value.payment,
-      cardNumber: orderForm.value.cardNumber
-    })
-  })
-  if (res.ok) {
-    showOrderModal.value = false
-    showToast('주문이 완료되었습니다!')
-  } else showToast('주문 처리 중 오류가 발생했습니다.')
-}
 
 async function submitReview() {
   if (!reviewForm.value.content) { showToast('리뷰 내용을 입력해주세요.'); return }
