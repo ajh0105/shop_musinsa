@@ -1,0 +1,7 @@
+node_modules
+dist
+dist-ssr
+*.local
+build-output.txt
+vite-debug.txt
+.DS_Store
