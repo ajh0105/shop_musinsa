@@ -7,6 +7,7 @@ import Cart from '../views/Cart.vue'
 import MyPage from '../views/MyPage.vue'
 import ProductDetail from '../views/ProductDetail.vue'
 import Checkout from '../views/Checkout.vue'
+import CartCheckout from '../views/CartCheckout.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/cart', component: Cart },
   { path: '/mypage', component: MyPage, meta: { requiresAuth: true } },
   { path: '/checkout', component: Checkout, meta: { requiresAuth: true } },
+  { path: '/cart-checkout', component: CartCheckout, meta: { requiresAuth: true } },
 
   // Admin routes
   {

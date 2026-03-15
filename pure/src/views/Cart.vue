@@ -74,46 +74,11 @@
             <span>{{ formatPrice(finalPrice) }}</span>
           </div>
 
-          <button class="btn-order" :disabled="selectedItems.length === 0" @click="showOrderModal = true">
+          <button class="btn-order" :disabled="selectedItems.length === 0" @click="goToCheckout">
             주문하기 ({{ selectedItems.length }}개)
           </button>
           <p class="summary-note">50,000원 이상 구매 시 무료 배송</p>
         </div>
-      </div>
-    </div>
-
-    <!-- 주문 모달 -->
-    <div v-if="showOrderModal" class="modal-overlay" @click.self="showOrderModal = false">
-      <div class="modal">
-        <h3 class="modal-title">주문 정보 입력</h3>
-        <form @submit.prevent="handleOrder">
-          <div class="form-group">
-            <label class="form-label">주문자 이름</label>
-            <input v-model="orderForm.name" type="text" class="form-input" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">배송 주소</label>
-            <input v-model="orderForm.address" type="text" class="form-input" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">결제 수단</label>
-            <select v-model="orderForm.payment" class="form-input">
-              <option value="CARD">신용카드</option>
-              <option value="CASH">무통장입금</option>
-            </select>
-          </div>
-          <div v-if="orderForm.payment === 'CARD'" class="form-group">
-            <label class="form-label">카드 번호</label>
-            <input v-model="orderForm.cardNumber" type="text" class="form-input" maxlength="16" placeholder="1234567890123456" />
-          </div>
-          <p v-if="orderError" class="form-error">{{ orderError }}</p>
-          <div class="modal-actions">
-            <button type="button" class="btn-cancel" @click="showOrderModal = false">취소</button>
-            <button type="submit" class="btn-submit" :disabled="ordering">
-              {{ ordering ? '처리 중...' : `${formatPrice(finalPrice)} 결제` }}
-            </button>
-          </div>
-        </form>
       </div>
     </div>
 
@@ -126,25 +91,17 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 
+const router = useRouter()
 const { isLoggedIn } = useAuth()
 
 const loading = ref(false)
 const cartItems = ref([])
 const selectedItems = ref([])
 const allSelected = ref(false)
-const showOrderModal = ref(false)
-const ordering = ref(false)
-const orderError = ref('')
 const toastMsg = ref('')
-
-const orderForm = ref({
-  name: '',
-  address: '',
-  payment: 'CARD',
-  cardNumber: ''
-})
 
 function showToast(msg) {
   toastMsg.value = msg
@@ -207,35 +164,11 @@ async function removeSelected() {
   }
 }
 
-async function handleOrder() {
-  orderError.value = ''
-  ordering.value = true
-  try {
-    const res = await fetch('/v1/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        name: orderForm.value.name,
-        address: orderForm.value.address,
-        payment: orderForm.value.payment,
-        cardNumber: orderForm.value.cardNumber,
-        itemIds: selectedItems.value
-      })
-    })
-    if (res.ok) {
-      showOrderModal.value = false
-      showToast('주문이 완료되었습니다!')
-      cartItems.value = []
-      selectedItems.value = []
-    } else {
-      orderError.value = '주문에 실패했습니다.'
-    }
-  } catch {
-    orderError.value = '네트워크 오류가 발생했습니다.'
-  } finally {
-    ordering.value = false
-  }
+function goToCheckout() {
+  router.push({
+    path: '/cart-checkout',
+    query: { items: selectedItems.value.join(',') }
+  })
 }
 
 onMounted(fetchCart)
