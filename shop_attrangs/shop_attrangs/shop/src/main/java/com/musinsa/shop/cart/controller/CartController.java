@@ -1,0 +1,55 @@
+package com.musinsa.shop.cart.controller;
+
+import com.musinsa.shop.cart.dto.CartRead;
+import com.musinsa.shop.cart.dto.CartRequest;
+import com.musinsa.shop.cart.service.CartService;
+import com.musinsa.shop.common.util.SecurityUtil;
+import com.musinsa.shop.item.dto.ItemRead;
+import com.musinsa.shop.item.service.ItemService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/v1")
+@RequiredArgsConstructor
+public class CartController {
+
+    private final CartService cartService;
+    private final ItemService itemService;
+    private final SecurityUtil securityUtil;
+
+    @GetMapping("/api/cart/items")
+    public ResponseEntity<?> readAll() {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
+
+        List<CartRead> carts = cartService.findAll(memberId);
+        List<Integer> itemIds = carts.stream().map(CartRead::getItemId).toList();
+        List<ItemRead> items = itemService.findAll(itemIds);
+        return ResponseEntity.ok(items);
+    }
+
+    @PostMapping("/api/carts")
+    public ResponseEntity<?> push(@RequestBody CartRequest cartReq) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
+
+        CartRead existing = cartService.find(memberId, cartReq.getItemId());
+        if (existing == null) {
+            cartService.save(cartReq.toEntity(memberId));
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(409).body("이미 장바구니에 담긴 상품입니다.");
+    }
+
+    @DeleteMapping("/api/cart/item/{itemId}")
+    public ResponseEntity<?> remove(@PathVariable Integer itemId) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
+        cartService.remove(memberId, itemId);
+        return ResponseEntity.ok().build();
+    }
+}
