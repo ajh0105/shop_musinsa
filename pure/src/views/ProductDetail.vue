@@ -250,8 +250,10 @@ async function addToCart() {
     showToast('장바구니에 추가되었습니다.')
   } else if (res.status === 409) {
     showToast('이미 장바구니에 있습니다.')
+  } else if (res.status === 401) {
+    showToast('로그인이 필요합니다.')
   } else {
-    showToast('오류가 발생했습니다.')
+    showToast('장바구니 담기에 실패했습니다. (서버 오류)')
   }
 }
 

@@ -2,8 +2,10 @@ package com.musinsa.shop.cart.dto;
 
 import com.musinsa.shop.cart.entity.Cart;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class CartRequest {
 
     private Integer itemId;
