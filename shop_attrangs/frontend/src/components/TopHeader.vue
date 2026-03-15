@@ -8,6 +8,7 @@
         <template v-if="isLoggedIn">
           <span class="user-name">{{ userName }}</span>
           <router-link to="/mypage">마이페이지</router-link>
+          <router-link v-if="isAdmin" to="/admin" class="admin-link">관리자</router-link>
           <button class="link-btn" @click="handleLogout">로그아웃</button>
         </template>
         <template v-else>
@@ -29,13 +30,15 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { CATEGORIES } from '../data/mockItems'
 import { useAuth } from '../composables/useAuth.js'
 
 const categories = CATEGORIES
 const router = useRouter()
-const { isLoggedIn, userName, logout } = useAuth()
+const { isLoggedIn, userName, role, logout } = useAuth()
+const isAdmin = computed(() => role.value === 'ROLE_ADMIN')
 
 async function handleLogout() {
   await logout()

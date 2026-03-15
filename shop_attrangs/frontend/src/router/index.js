@@ -19,9 +19,41 @@ const router = createRouter({
     { path: '/wishlist', name: 'wishlist', component: WishlistView },
     { path: '/login', name: 'login', component: LoginView },
     { path: '/join', name: 'join', component: JoinView },
-    { path: '/checkout', name: 'checkout', component: CheckoutView },
-    { path: '/mypage', name: 'mypage', component: MyPageView }
-  ]
+    { path: '/checkout', name: 'checkout', component: CheckoutView, meta: { requiresAuth: true } },
+    { path: '/mypage', name: 'mypage', component: MyPageView, meta: { requiresAuth: true } },
+
+    // 관리자 라우트
+    {
+      path: '/admin',
+      component: () => import('../views/admin/AdminLayout.vue'),
+      meta: { requiresAdmin: true },
+      children: [
+        { path: '', redirect: '/admin/dashboard' },
+        { path: 'dashboard', component: () => import('../views/admin/Dashboard.vue') },
+        { path: 'members', component: () => import('../views/admin/Members.vue') },
+        { path: 'products', component: () => import('../views/admin/Products.vue') },
+        { path: 'orders', component: () => import('../views/admin/Orders.vue') },
+        { path: 'reviews', component: () => import('../views/admin/Reviews.vue') },
+        { path: 'qna', component: () => import('../views/admin/QnA.vue') }
+      ]
+    }
+  ],
+  scrollBehavior() {
+    return { top: 0 }
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  const role = localStorage.getItem('at_role')
+  const loginId = localStorage.getItem('at_loginId')
+
+  if (to.meta.requiresAdmin && role !== 'ROLE_ADMIN') {
+    return next('/login')
+  }
+  if (to.meta.requiresAuth && !loginId) {
+    return next('/login')
+  }
+  next()
 })
 
 export default router
