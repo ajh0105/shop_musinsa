@@ -2,7 +2,7 @@
   <div class="admin-layout">
     <aside class="admin-sidebar">
       <div class="admin-logo">
-        <RouterLink to="/admin/dashboard">MUSINSA ADMIN</RouterLink>
+        <RouterLink to="/admin/dashboard">VENTALIZE ADMIN</RouterLink>
       </div>
       <nav class="admin-nav">
         <RouterLink to="/admin/dashboard" class="admin-nav-link" active-class="active">
@@ -22,6 +22,9 @@
         </RouterLink>
         <RouterLink to="/admin/qna" class="admin-nav-link" active-class="active">
           💬 Q&A 관리
+        </RouterLink>
+        <RouterLink to="/admin/board" class="admin-nav-link" active-class="active">
+          📋 게시판 관리
         </RouterLink>
       </nav>
       <div class="admin-sidebar-footer">

@@ -66,7 +66,7 @@
         <div class="promo-banner-inner">
           <span class="promo-tag">NEW</span>
           <span class="promo-text">2025 S/S 신상품 대거 입고 — 최대 30% 할인 쿠폰 증정</span>
-          <RouterLink to="/category/OUTER" class="promo-link">지금 확인 →</RouterLink>
+          <RouterLink to="/category/SCARVES" class="promo-link">지금 확인 →</RouterLink>
         </div>
       </div>
     </section>
@@ -163,12 +163,12 @@
       </div>
     </section>
 
-    <!-- 아우터 추천 섹션 행 -->
+    <!-- 스카프 추천 섹션 행 -->
     <section class="category-row-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">아우터 추천</h2>
-          <RouterLink to="/category/OUTER" class="section-more">더보기 →</RouterLink>
+          <h2 class="section-title">스카프 추천</h2>
+          <RouterLink to="/category/SCARVES" class="section-more">더보기 →</RouterLink>
         </div>
         <div v-if="outerLoading" class="loading-box"><div class="spinner"></div></div>
         <div v-else class="product-row">
@@ -198,9 +198,9 @@
     <!-- 할인 배너 -->
     <section class="sale-banner-section">
       <div class="container">
-        <RouterLink to="/category/OUTLET" class="sale-banner">
+        <RouterLink to="/category/SALE" class="sale-banner">
           <div class="sale-banner-left">
-            <span class="sale-banner-tag">OUTLET</span>
+            <span class="sale-banner-tag">SALE</span>
             <h3 class="sale-banner-title">최대 50% 할인</h3>
             <p class="sale-banner-desc">인기 브랜드 아이템을 특가에 만나보세요</p>
           </div>
@@ -211,12 +211,12 @@
       </div>
     </section>
 
-    <!-- 신발 추천 섹션 -->
+    <!-- 가방 추천 섹션 -->
     <section class="category-row-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">신발 추천</h2>
-          <RouterLink to="/category/SHOES" class="section-more">더보기 →</RouterLink>
+          <h2 class="section-title">가방 추천</h2>
+          <RouterLink to="/category/BAG" class="section-more">더보기 →</RouterLink>
         </div>
         <div v-if="shoesLoading" class="loading-box"><div class="spinner"></div></div>
         <div v-else class="product-row">
@@ -253,70 +253,47 @@ let autoSlide = null
 
 const banners = [
   {
-    bg: 'linear-gradient(135deg, #0a0a0a 0%, #1c1c2e 60%, #252545 100%)',
+    bg: 'linear-gradient(135deg, #1a0e1f 0%, #2d1b38 60%, #3d2550 100%)',
     sub: '2025 S/S NEW COLLECTION',
-    title: '봄을 입다,\n무신사 스탠다드',
-    desc: '헤비 코튼부터 린넨 블렌드까지\n합리적인 가격의 일상 필수 아이템',
-    cta: '상의 컬렉션 보러가기',
-    link: '/category/TOP',
+    title: '봄을 감싸다,\nVENTALIZE 스카프',
+    desc: '순수 실크부터 캐시미어까지\n계절을 아름답게 완성하는 스카프',
+    cta: 'SCARVES 보러가기',
+    link: '/category/SCARVES',
     badge: 'NEW',
-    highlight: '최대 30% 쿠폰',
-    img: 'https://picsum.photos/seed/bnr001/500/620'
+    highlight: '최대 20% 할인',
+    img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600'
   },
   {
-    bg: 'linear-gradient(135deg, #0f0f1a 0%, #1a1035 60%, #2a1a4a 100%)',
-    sub: '2025 SNEAKER DROP',
-    title: '이번 시즌\n필수 스니커즈',
-    desc: '나이키 덩크, 아디다스 삼바, 뉴발란스 990\n지금 바로 만나보세요',
-    cta: '신발 전체보기',
-    link: '/category/SHOES',
+    bg: 'linear-gradient(135deg, #0f1a1a 0%, #1a2d2d 60%, #253d3d 100%)',
+    sub: '2025 S/S READY TO WEAR',
+    title: '우아한 일상을\n입다',
+    desc: '실크 블라우스, 울 재킷, 플리츠 스커트\n벙딸리제의 기성복 컬렉션',
+    cta: 'READY TO WEAR 보러가기',
+    link: '/category/READY_TO_WEAR',
     badge: 'HOT',
-    highlight: '인기 스니커즈 총집합',
-    img: 'https://picsum.photos/seed/bnr002/500/620'
+    highlight: '시즌 신상 입고',
+    img: 'https://images.unsplash.com/photo-1594938298603-c8148c4b4cde?w=600'
   },
   {
-    bg: 'linear-gradient(135deg, #1a0a0a 0%, #2d1010 60%, #3d1515 100%)',
-    sub: 'OUTLET SPECIAL SALE',
-    title: '최대 50% OFF\n아울렛 특가',
-    desc: '노스페이스·나이키·아디다스 시즌 오프\n이월 상품 한정 수량 특가 판매',
-    cta: '아울렛 전체보기',
-    link: '/category/OUTLET',
+    bg: 'linear-gradient(135deg, #1a1205 0%, #2d1e08 60%, #3d2d0e 100%)',
+    sub: 'VENTALIZE SPECIAL SALE',
+    title: '최대 50% OFF\n시즌 오프 특가',
+    desc: '지난 시즌 인기 아이템을 특별한 가격에\n한정 수량 특가 판매',
+    cta: 'SALE 전체보기',
+    link: '/category/SALE',
     badge: 'SALE',
     highlight: '최대 50% 할인',
-    img: 'https://picsum.photos/seed/bnr003/500/620'
-  },
-  {
-    bg: 'linear-gradient(135deg, #0a1a0f 0%, #102a18 60%, #1a3a24 100%)',
-    sub: 'STREET BRAND PICK',
-    title: '지금 뜨는\n스트리트 브랜드',
-    desc: '커버낫, 아더에러, 칼하트, 브레인데드\n국내외 스트리트 씬의 핵심 아이템',
-    cta: '아우터 보러가기',
-    link: '/category/OUTER',
-    badge: 'PICK',
-    highlight: '에디터 큐레이션',
-    img: 'https://picsum.photos/seed/bnr004/500/620'
-  },
-  {
-    bg: 'linear-gradient(135deg, #1a1205 0%, #2a1e08 60%, #3a2a0e 100%)',
-    sub: 'ACCESSORY SEASON',
-    title: '완성하는 한 가지\n악세사리 컬렉션',
-    desc: 'MLB 볼캡, 뉴에라 피티드, 무신사 스탠다드 삭스\n데일리 룩의 마무리',
-    cta: '악세사리 보러가기',
-    link: '/category/ACC',
-    badge: 'NEW',
-    highlight: '시즌 신상 대거 입고',
-    img: 'https://picsum.photos/seed/bnr005/500/620'
+    img: 'https://images.unsplash.com/photo-1512411600720-d26919c6a9da?w=600'
   }
 ]
 
 const quickCategories = [
-  { name: 'OUTER', label: '아우터', icon: '🧥' },
-  { name: 'TOP', label: '상의', icon: '👕' },
-  { name: 'PANTS', label: '하의', icon: '👖' },
-  { name: 'SHOES', label: '신발', icon: '👟' },
-  { name: 'BAG', label: '가방', icon: '👜' },
-  { name: 'ACC', label: '악세사리', icon: '🕶️' },
-  { name: 'OUTLET', label: '아울렛', icon: '🏷️' },
+  { name: 'SCARVES',       label: '스카프',     icon: '🧣' },
+  { name: 'READY_TO_WEAR', label: '기성복',     icon: '👗' },
+  { name: 'PERFUME',       label: '향수',       icon: '🌸' },
+  { name: 'ACC',           label: '악세사리',   icon: '💍' },
+  { name: 'BAG',           label: '가방',       icon: '👜' },
+  { name: 'SALE',          label: '세일',       icon: '🏷️' },
 ]
 
 const loading = ref(false)
@@ -384,7 +361,7 @@ async function fetchRecommend() {
 async function fetchOuter() {
   outerLoading.value = true
   try {
-    const res = await fetch('/v1/api/items?category=OUTER', { credentials: 'include' })
+    const res = await fetch('/v1/api/items?category=SCARVES', { credentials: 'include' })
     const data = await res.json()
     outerItems.value = data.slice(0, 5)
   } catch (e) {
@@ -397,7 +374,7 @@ async function fetchOuter() {
 async function fetchShoes() {
   shoesLoading.value = true
   try {
-    const res = await fetch('/v1/api/items?category=SHOES', { credentials: 'include' })
+    const res = await fetch('/v1/api/items?category=BAG', { credentials: 'include' })
     const data = await res.json()
     shoesItems.value = data.slice(0, 5)
   } catch (e) {

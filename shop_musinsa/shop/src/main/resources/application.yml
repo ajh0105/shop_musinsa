@@ -3,9 +3,9 @@ server:
 
 spring:
   application:
-    name: shop_musinsa
+    name: ventalize
   datasource:
-    url: jdbc:postgresql://localhost:5432/shop
+    url: jdbc:postgresql://localhost:5432/ventalize
     username: postgres
     password: 1004
     driver-class-name: org.postgresql.Driver

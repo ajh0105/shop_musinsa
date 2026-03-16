@@ -20,6 +20,17 @@ const routes = [
   { path: '/checkout', component: Checkout, meta: { requiresAuth: true } },
   { path: '/cart-checkout', component: CartCheckout, meta: { requiresAuth: true } },
 
+  // Board routes
+  {
+    path: '/board',
+    component: () => import('../views/board/BoardLayout.vue'),
+    children: [
+      { path: '', redirect: '/board/faq' },
+      { path: 'faq', component: () => import('../views/board/Faq.vue') },
+      { path: 'inquiry', component: () => import('../views/board/Inquiry.vue'), meta: { requiresAuth: true } },
+    ]
+  },
+
   // Admin routes
   {
     path: '/admin',
@@ -33,6 +44,7 @@ const routes = [
       { path: 'orders', component: () => import('../views/admin/Orders.vue') },
       { path: 'reviews', component: () => import('../views/admin/Reviews.vue') },
       { path: 'qna', component: () => import('../views/admin/QnA.vue') },
+      { path: 'board', component: () => import('../views/admin/Board.vue') },
     ]
   }
 ]

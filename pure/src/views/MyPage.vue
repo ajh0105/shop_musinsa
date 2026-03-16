@@ -29,7 +29,7 @@
                 <span class="order-id">#{{ order.id }}</span>
                 <span class="order-date">{{ formatDate(order.createdAt) }}</span>
                 <span class="order-status" :class="`status-${order.status?.toLowerCase()}`">
-                  {{ order.status === 'PAID' ? '결제완료' : order.status === 'CANCELLED' ? '취소됨' : order.status }}
+                  {{ order.statusLabel || order.status }}
                 </span>
               </div>
               <div class="order-card-body">
@@ -38,7 +38,7 @@
                 <p>결제수단: {{ order.payment }}</p>
               </div>
               <div class="order-card-footer">
-                <button v-if="order.status === 'PAID'" class="btn-cancel-order" @click="cancelOrder(order.id)">주문 취소</button>
+                <button v-if="['PENDING_PAYMENT','PAID'].includes(order.status)" class="btn-cancel-order" @click="cancelOrder(order.id)">주문 취소</button>
               </div>
             </div>
           </div>

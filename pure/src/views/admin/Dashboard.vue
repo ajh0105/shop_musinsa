@@ -35,10 +35,31 @@
           </div>
         </div>
         <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-body">
+            <p class="stat-label">결제대기</p>
+            <p class="stat-value">{{ stats.pendingPaymentOrders?.toLocaleString() }}</p>
+          </div>
+        </div>
+        <div class="stat-card">
           <div class="stat-icon">✅</div>
           <div class="stat-body">
             <p class="stat-label">결제완료</p>
             <p class="stat-value">{{ stats.paidOrders?.toLocaleString() }}</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚚</div>
+          <div class="stat-body">
+            <p class="stat-label">배송중</p>
+            <p class="stat-value">{{ stats.shippingOrders?.toLocaleString() }}</p>
+          </div>
+        </div>
+        <div class="stat-card stat-card--success">
+          <div class="stat-icon">📬</div>
+          <div class="stat-body">
+            <p class="stat-label">배송완료</p>
+            <p class="stat-value">{{ stats.deliveredOrders?.toLocaleString() }}</p>
           </div>
         </div>
         <div class="stat-card">
@@ -55,6 +76,28 @@
             <p class="stat-value">{{ stats.totalReviews?.toLocaleString() }}</p>
           </div>
         </div>
+        <div class="stat-card stat-card--warn">
+          <div class="stat-icon">💬</div>
+          <div class="stat-body">
+            <p class="stat-label">미답변 문의</p>
+            <p class="stat-value">{{ stats.unansweredInquiries?.toLocaleString() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 재고 부족 상품 -->
+      <div v-if="stats.lowStockItems?.length" class="admin-card mt-4">
+        <h2 class="admin-card-title">⚠️ 재고 부족 상품 (5개 이하)</h2>
+        <table class="admin-table">
+          <thead><tr><th>ID</th><th>상품명</th><th>재고</th></tr></thead>
+          <tbody>
+            <tr v-for="item in stats.lowStockItems" :key="item.id">
+              <td>#{{ item.id }}</td>
+              <td>{{ item.name }}</td>
+              <td><span class="low-stock">{{ item.stockCount }}개</span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- 최근 주문 -->
@@ -77,7 +120,7 @@
               <td>{{ order.amount?.toLocaleString() }}원</td>
               <td>
                 <span class="order-status" :class="`status-${order.status?.toLowerCase()}`">
-                  {{ order.status === 'PAID' ? '결제완료' : '취소됨' }}
+                  {{ order.statusLabel || order.status }}
                 </span>
               </td>
               <td>{{ formatDate(order.createdAt) }}</td>
@@ -109,3 +152,14 @@ async function loadStats() {
 
 onMounted(loadStats)
 </script>
+
+<style scoped>
+.stat-card--success { border-left: 4px solid #2e7d32; }
+.stat-card--warn { border-left: 4px solid #e65100; }
+.low-stock { color: #c62828; font-weight: 700; }
+.status-pending_payment { color: #e65100; }
+.status-paid { color: #1565c0; }
+.status-shipping { color: #6a1b9a; }
+.status-delivered { color: #2e7d32; }
+.status-cancelled { color: #c62828; }
+</style>
