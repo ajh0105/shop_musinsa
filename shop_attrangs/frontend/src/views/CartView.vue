@@ -56,7 +56,7 @@ const selected = ref([])
 const selectedTotal = computed(() =>
   items.value
     .filter(i => selected.value.includes(i.id))
-    .reduce((sum, i) => sum + (i.salePrice ?? i.price), 0)
+    .reduce((sum, i) => sum + (Number(i.salePrice ?? i.price) || 0), 0)
 )
 const finalTotal = computed(() =>
   selectedTotal.value + (selectedTotal.value >= 50000 ? 0 : 3000)
@@ -65,7 +65,11 @@ const finalTotal = computed(() =>
 async function loadCart() {
   try {
     const { data } = await api.get('/cart/items')
-    items.value = Array.isArray(data) ? data : []
+    // Backend returns { id, itemId, item: { name, imgPath, price, salePrice, ... } }
+    // Flatten nested item object so template can access fields directly
+    items.value = Array.isArray(data)
+      ? data.map(ci => ({ id: ci.id, ...(ci.item ?? ci) }))
+      : []
     selected.value = items.value.map(i => i.id)
   } catch (e) {
     items.value = []
