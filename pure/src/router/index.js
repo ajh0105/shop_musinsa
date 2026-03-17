@@ -11,6 +11,7 @@ import CartCheckout from '../views/CartCheckout.vue'
 import FAQ from '../views/FAQ.vue'
 import Board from '../views/Board.vue'
 import AllReviews from '../views/AllReviews.vue'
+import Terms from '../views/Terms.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -27,6 +28,7 @@ const routes = [
   { path: '/faq', component: FAQ },
   { path: '/board', component: Board },
   { path: '/reviews', component: AllReviews },
+  { path: '/terms', component: Terms },
 
   // Admin routes
   {

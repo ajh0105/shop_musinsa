@@ -79,8 +79,8 @@
           <p class="section-sub">새로 입고된 아이템</p>
         </div>
         <div v-if="newLoading" class="loading-box"><div class="spinner"></div></div>
-        <div v-else class="product-grid">
-          <RouterLink v-for="item in newItems" :key="item.id" :to="`/product/${item.id}`" class="product-card">
+        <div v-else class="product-row">
+          <RouterLink v-for="item in newItems" :key="item.id" :to="`/product/${item.id}`" class="product-card product-card--sm">
             <div class="product-img-wrap">
               <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span class="product-badge product-badge--new">NEW</span>
@@ -109,12 +109,12 @@
         <div v-if="loading" class="loading-box">
           <div class="spinner"></div>
         </div>
-        <div v-else class="product-grid">
+        <div v-else class="product-row">
           <RouterLink
             v-for="item in hitItems"
             :key="item.id"
             :to="`/product/${item.id}`"
-            class="product-card"
+            class="product-card product-card--sm"
           >
             <div class="product-img-wrap">
               <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
@@ -143,8 +143,8 @@
           <p class="section-sub">할인율이 높은 인기 아이템</p>
         </div>
         <div v-if="recLoading" class="loading-box"><div class="spinner"></div></div>
-        <div v-else class="product-grid">
-          <RouterLink v-for="item in recItems" :key="item.id" :to="`/product/${item.id}`" class="product-card">
+        <div v-else class="product-row">
+          <RouterLink v-for="item in recItems" :key="item.id" :to="`/product/${item.id}`" class="product-card product-card--sm">
             <div class="product-img-wrap">
               <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
@@ -352,7 +352,7 @@ async function fetchItems() {
   try {
     const res = await fetch('/v1/api/items?sort=best')
     const data = await res.json()
-    hitItems.value = data.slice(0, 4)
+    hitItems.value = data.slice(0, 5)
   } catch (e) {
     console.error('상품 조회 실패', e)
   } finally {
@@ -364,7 +364,8 @@ async function fetchNew() {
   newLoading.value = true
   try {
     const res = await fetch('/v1/api/items?sort=new')
-    newItems.value = await res.json()
+    const data = await res.json()
+    newItems.value = data.slice(0, 5)
   } catch (e) {
     console.error(e)
   } finally {
@@ -376,7 +377,8 @@ async function fetchRecommend() {
   recLoading.value = true
   try {
     const res = await fetch('/v1/api/items?sort=recommend')
-    recItems.value = await res.json()
+    const data = await res.json()
+    recItems.value = data.slice(0, 5)
   } catch (e) {
     console.error(e)
   } finally {

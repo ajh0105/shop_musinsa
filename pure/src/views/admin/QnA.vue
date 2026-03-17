@@ -10,37 +10,39 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="q in questions" :key="q.id">
-            <td>{{ q.id }}</td>
-            <td>{{ q.memberName }}</td>
-            <td>
-              <button class="link-btn" @click="toggleExpand(q.id)">
-                {{ q.title }}
-              </button>
-            </td>
-            <td>{{ q.isSecret ? '🔒' : '-' }}</td>
-            <td>
-              <span class="qna-status" :class="q.isAnswered ? 'answered' : 'pending'">
-                {{ q.isAnswered ? '답변완료' : '답변대기' }}
-              </span>
-            </td>
-            <td>{{ formatDate(q.createdAt) }}</td>
-            <td class="action-cell">
-              <button class="btn-admin-primary" @click="openAnswerModal(q)">답변</button>
-              <button class="btn-admin-danger" @click="deleteQna(q.id)">삭제</button>
-            </td>
-          </tr>
-          <!-- 확장 행 -->
-          <tr v-if="expandedId === q.id" v-for="q in questions" :key="'exp-'+q.id" class="expand-row">
-            <td colspan="7">
-              <div class="qna-detail">
-                <p><strong>내용:</strong> {{ q.content }}</p>
-                <div v-if="q.isAnswered && q.answerContent" class="qna-answer">
-                  <strong>답변:</strong> {{ q.answerContent }}
+          <template v-for="q in questions" :key="q.id">
+            <tr>
+              <td>{{ q.id }}</td>
+              <td>{{ q.memberName }}</td>
+              <td>
+                <button class="link-btn" @click="toggleExpand(q.id)">
+                  {{ q.title }}
+                </button>
+              </td>
+              <td>{{ q.isSecret ? '🔒' : '-' }}</td>
+              <td>
+                <span class="qna-status" :class="q.isAnswered ? 'answered' : 'pending'">
+                  {{ q.isAnswered ? '답변완료' : '답변대기' }}
+                </span>
+              </td>
+              <td>{{ formatDate(q.createdAt) }}</td>
+              <td class="action-cell">
+                <button class="btn-admin-primary" @click="openAnswerModal(q)">답변</button>
+                <button class="btn-admin-danger" @click="deleteQna(q.id)">삭제</button>
+              </td>
+            </tr>
+            <!-- 확장 행 -->
+            <tr v-if="expandedId === q.id" class="expand-row">
+              <td colspan="7">
+                <div class="qna-detail">
+                  <p><strong>내용:</strong> {{ q.content }}</p>
+                  <div v-if="q.isAnswered && q.answerContent" class="qna-answer">
+                    <strong>답변:</strong> {{ q.answerContent }}
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>

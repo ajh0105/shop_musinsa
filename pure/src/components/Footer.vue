@@ -15,7 +15,7 @@
             <span class="footer-link-title">회사소개</span>
             <a href="#" class="footer-link">무신사 소개</a>
             <a href="#" class="footer-link">채용 정보</a>
-            <a href="#" class="footer-link">이용약관</a>
+            <RouterLink to="/terms" class="footer-link">이용약관</RouterLink>
           </div>
           <div class="footer-link-group">
             <span class="footer-link-title">서비스</span>
