@@ -1,6 +1,6 @@
 <template>
   <main class="page-wrap auth-wrap">
-    <h2>로그인</h2>
+    <h2 style="font-size:26px; margin-bottom:28px;">로그인</h2>
     <form @submit.prevent="submit" class="auth-form">
       <input v-model="loginId" type="email" placeholder="이메일" required />
       <input v-model="loginPw" type="password" placeholder="비밀번호" required />

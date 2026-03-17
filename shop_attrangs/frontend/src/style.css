@@ -83,18 +83,113 @@ a { color: inherit; text-decoration: none; }
 .section-head h2 { margin: 0; font-size: 25px; }
 .section-head p { margin: 6px 0 16px; color: var(--sub); }
 .card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+/* 카드 래퍼 - 찜 버튼 위치 기준 */
+.item-card-wrapper {
+  position: relative;
+}
+
 .item-card {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 14px;
   overflow: hidden;
   display: block;
+  transition: box-shadow 0.22s, transform 0.22s;
 }
-.item-card img { width: 100%; height: 250px; object-fit: cover; }
+.item-card:hover {
+  box-shadow: 0 8px 28px rgba(46,32,25,0.13);
+  transform: translateY(-2px);
+}
+
+/* 썸네일 + 호버 오버레이 */
+.item-thumb {
+  position: relative;
+  overflow: hidden;
+}
+.item-thumb img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.25s, transform 0.3s;
+}
+.item-card:hover .item-thumb img {
+  opacity: 0.72;
+  transform: scale(1.03);
+}
+.item-hover-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.22s;
+  pointer-events: none;
+}
+.item-card:hover .item-hover-overlay {
+  opacity: 1;
+}
+.item-hover-text {
+  background: rgba(255,255,255,0.92);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  letter-spacing: 0.04em;
+}
+
 .item-info { padding: 12px; }
 .item-info span { color: var(--sub); font-size: 12px; }
 .item-info h3 { margin: 6px 0; font-size: 15px; min-height: 40px; }
-.item-info p { margin: 0; color: var(--point); font-weight: 700; }
+
+/* 가격 행 (판매가 + 정상가 취소선) */
+.item-price-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.item-sale-price {
+  margin: 0;
+  color: var(--point);
+  font-weight: 700;
+  font-size: 15px;
+}
+.item-origin-price {
+  font-size: 12px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+/* 찜 버튼 */
+.wish-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+  z-index: 2;
+  padding: 0;
+}
+.wish-btn:hover {
+  transform: scale(1.15);
+  background: #fff;
+}
+.wish-btn--active {
+  background: #fff0f0;
+}
 
 .pager { margin-top: 18px; display: flex; justify-content: center; gap: 10px; }
 .pager button {
@@ -132,28 +227,114 @@ a { color: inherit; text-decoration: none; }
 .list-box { padding-left: 18px; }
 .empty { color: var(--sub); }
 
-.auth-wrap { max-width: 420px; }
-.auth-form { display: grid; gap: 10px; }
+.auth-wrap {
+  max-width: 460px;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+.auth-form { display: grid; gap: 14px; }
 .auth-form input {
-  padding: 10px 12px;
+  padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
 }
+.auth-form input:focus { outline: none; border-color: var(--point); }
 .auth-form button {
-  padding: 10px 12px;
+  padding: 14px 12px;
   border: none;
   border-radius: 8px;
   background: var(--point);
   color: #fff;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 6px;
 }
 
-.footer-split { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
-.footer-split section { position: relative; min-height: 190px; overflow: hidden; }
-.footer-split img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); }
-.footer-split div { position: absolute; left: 20px; bottom: 18px; color: #fff; }
-.footer-split h4 { margin: 0; font-size: 18px; }
-.footer-split p { margin: 6px 0 0; font-size: 13px; }
+/* ========== FOOTER RENEW ========== */
+.footer-main {
+  border-top: 1px solid var(--line);
+  background: #2e2019;
+  color: #d9c9bf;
+  padding: 28px 0 20px;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.footer-col { display: flex; flex-direction: column; gap: 20px; }
+
+.footer-block-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fff;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+.footer-block-body {
+  font-size: 12px;
+  line-height: 1.85;
+  color: #c4b0a5;
+}
+.footer-block-body strong {
+  color: #e8d8cf;
+  font-weight: 600;
+}
+.footer-block-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  line-height: 2;
+  color: #c4b0a5;
+}
+.footer-block-list li::before { content: '◎ '; color: var(--point); }
+
+/* SNS 아이콘 */
+.footer-sns {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.sns-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s, opacity 0.18s;
+  flex-shrink: 0;
+}
+.sns-icon:hover { transform: scale(1.1); opacity: 0.9; }
+.sns-instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.sns-facebook { background: #1877F2; }
+.sns-youtube { background: #FF0000; }
+.sns-kakao { background: #FEE500; }
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 16px auto 0;
+  padding: 12px 24px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 11px;
+  color: #8a7a72;
+}
+
+@media (max-width: 920px) {
+  .footer-inner { grid-template-columns: 1fr; gap: 16px; }
+}
 
 @media (max-width: 920px) {
   .hero-slide { height: 260px; }
