@@ -19,7 +19,7 @@
         <tbody>
           <tr v-for="p in products" :key="p.id">
             <td>{{ p.id }}</td>
-            <td><img :src="p.imgPath" class="admin-thumb" /></td>
+            <td><img :src="p.imgPath" class="admin-thumb" @error="$event.target.src='https://placehold.co/48x60/f5f5f5/999?text=?'" /></td>
             <td>{{ p.brand }}</td>
             <td>{{ p.name }}</td>
             <td>{{ p.category }}</td>

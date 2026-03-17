@@ -82,7 +82,7 @@
         <div v-else class="product-grid">
           <RouterLink v-for="item in newItems" :key="item.id" :to="`/product/${item.id}`" class="product-card">
             <div class="product-img-wrap">
-              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span class="product-badge product-badge--new">NEW</span>
             </div>
             <div class="product-info">
@@ -117,7 +117,7 @@
             class="product-card"
           >
             <div class="product-img-wrap">
-              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
               <span v-if="item.isSoldOut" class="product-badge product-badge--soldout">품절</span>
             </div>
@@ -146,7 +146,7 @@
         <div v-else class="product-grid">
           <RouterLink v-for="item in recItems" :key="item.id" :to="`/product/${item.id}`" class="product-card">
             <div class="product-img-wrap">
-              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
             </div>
             <div class="product-info">
@@ -179,7 +179,7 @@
             class="product-card product-card--sm"
           >
             <div class="product-img-wrap">
-              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
             </div>
             <div class="product-info">
@@ -227,7 +227,7 @@
             class="product-card product-card--sm"
           >
             <div class="product-img-wrap">
-              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+              <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
               <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
             </div>
             <div class="product-info">
@@ -247,6 +247,9 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useImgFallback } from '../composables/useImgFallback.js'
+
+const { onImgError } = useImgFallback()
 
 const currentSlide = ref(0)
 let autoSlide = null

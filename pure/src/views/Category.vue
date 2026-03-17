@@ -52,7 +52,7 @@
           @click="$router.push('/product/' + item.id)"
         >
           <div class="product-img-wrap">
-            <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" />
+            <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
             <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
             <span v-if="item.isSoldOut" class="product-badge product-badge--soldout">품절</span>
             <div class="product-overlay">
@@ -117,6 +117,9 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
+import { useImgFallback } from '../composables/useImgFallback.js'
+
+const { onImgError } = useImgFallback()
 
 const route = useRoute()
 const { isLoggedIn } = useAuth()

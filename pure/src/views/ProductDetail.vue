@@ -3,7 +3,7 @@
     <div class="product-detail-container">
       <!-- 이미지 영역 -->
       <div class="product-detail-image">
-        <img :src="item.imgPath" :alt="item.name" />
+        <img :src="item.imgPath" :alt="item.name" @error="onImgError" />
         <div v-if="item.isSoldOut" class="soldout-badge">SOLD OUT</div>
         <div v-if="item.discountPer > 0" class="discount-badge">{{ item.discountPer }}% OFF</div>
       </div>
@@ -59,7 +59,7 @@
       <!-- 상품 설명 -->
       <div v-if="activeTab === 'desc'" class="tab-content">
         <div class="product-desc-full">
-          <img :src="item.imgPath" :alt="item.name" style="width:100%;max-width:600px;display:block;margin:0 auto 20px;" />
+          <img :src="item.imgPath" :alt="item.name" style="width:100%;max-width:600px;display:block;margin:0 auto 20px;" @error="onImgError" />
           <p>{{ item.description || '상품 설명이 없습니다.' }}</p>
           <ul class="product-spec-list">
             <li><strong>브랜드</strong> {{ item.brand }}</li>
@@ -171,6 +171,9 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
+import { useImgFallback } from '../composables/useImgFallback.js'
+
+const { onImgError } = useImgFallback()
 
 const route = useRoute()
 const router = useRouter()
