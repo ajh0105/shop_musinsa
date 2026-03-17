@@ -18,6 +18,14 @@ public class QnAController {
     private final QnAService qnAService;
     private final SecurityUtil securityUtil;
 
+    /** 고객 문의 게시판 목록 (상품 미연결 Q&A) */
+    @GetMapping("/board")
+    public ResponseEntity<?> board() {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        boolean isAdmin = securityUtil.isAdmin();
+        return ResponseEntity.ok(qnAService.findBoard(memberId, isAdmin));
+    }
+
     /** 상품별 Q&A 목록 */
     @GetMapping("/item/{itemId}")
     public ResponseEntity<?> byItem(@PathVariable Integer itemId) {

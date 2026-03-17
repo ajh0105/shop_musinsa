@@ -77,6 +77,10 @@
         >
           {{ cat.label }}
         </RouterLink>
+        <span class="nav-divider">|</span>
+        <RouterLink to="/faq" class="nav-link nav-link--board" active-class="nav-link--active">FAQ</RouterLink>
+        <RouterLink to="/board" class="nav-link nav-link--board" active-class="nav-link--active">고객문의</RouterLink>
+        <RouterLink to="/reviews" class="nav-link nav-link--board" active-class="nav-link--active">전체리뷰</RouterLink>
       </div>
     </nav>
   </header>

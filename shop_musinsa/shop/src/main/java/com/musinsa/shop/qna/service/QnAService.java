@@ -13,6 +13,7 @@ public interface QnAService {
     QuestionRead update(Integer id, QuestionCreateRequest req, Integer memberId);
     boolean delete(Integer id, Integer memberId);
     List<QuestionRead> findAll();
+    List<QuestionRead> findBoard(Integer memberId, boolean isAdmin);
     QuestionRead answer(Integer id, AnswerRequest req, Integer adminId);
     boolean adminDelete(Integer id);
 }

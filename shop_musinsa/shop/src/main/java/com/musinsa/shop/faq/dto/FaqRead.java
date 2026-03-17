@@ -1,0 +1,18 @@
+package com.musinsa.shop.faq.dto;
+
+import lombok.Builder;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Builder
+public class FaqRead {
+    private Integer id;
+    private String category;
+    private String question;
+    private String answer;
+    private Integer sortOrder;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}

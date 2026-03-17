@@ -7,9 +7,9 @@
         <div class="footer-links">
           <div class="footer-link-group">
             <span class="footer-link-title">고객지원</span>
-            <a href="#" class="footer-link">공지사항</a>
-            <a href="#" class="footer-link">FAQ</a>
-            <a href="#" class="footer-link">1:1 문의</a>
+            <RouterLink to="/faq" class="footer-link">FAQ</RouterLink>
+            <RouterLink to="/board" class="footer-link">1:1 문의</RouterLink>
+            <RouterLink to="/reviews" class="footer-link">전체 리뷰</RouterLink>
           </div>
           <div class="footer-link-group">
             <span class="footer-link-title">회사소개</span>
@@ -40,8 +40,8 @@
           <p class="footer-cs-hours">평일 11:00 ~ 19:00</p>
           <p class="footer-cs-hours">주말 및 공휴일 휴무</p>
           <div class="footer-cs-buttons">
-            <a href="#" class="btn-cs">1:1 문의하기</a>
-            <a href="#" class="btn-cs">FAQ 바로가기</a>
+            <RouterLink to="/board" class="btn-cs">1:1 문의하기</RouterLink>
+            <RouterLink to="/faq" class="btn-cs">FAQ 바로가기</RouterLink>
           </div>
         </div>
 

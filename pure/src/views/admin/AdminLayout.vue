@@ -23,6 +23,9 @@
         <RouterLink to="/admin/qna" class="admin-nav-link" active-class="active">
           💬 Q&A 관리
         </RouterLink>
+        <RouterLink to="/admin/faq" class="admin-nav-link" active-class="active">
+          ❓ FAQ 관리
+        </RouterLink>
       </nav>
       <div class="admin-sidebar-footer">
         <RouterLink to="/" class="admin-nav-link">← 쇼핑몰로 이동</RouterLink>

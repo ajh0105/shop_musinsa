@@ -185,6 +185,8 @@ input, select, textarea { font-family: inherit; }
 .nav-link--active { border-bottom-color: var(--color-primary); }
 .nav-link--sale { color: var(--color-sale); }
 .nav-link--sale:hover { border-bottom-color: var(--color-sale); }
+.nav-link--board { color: var(--color-text-muted); font-size: 0.82rem; }
+.nav-divider { color: var(--color-border-dark); padding: 0 4px; display: flex; align-items: center; }
 
 /* ==========================================
    FOOTER
@@ -1300,6 +1302,8 @@ input, select, textarea { font-family: inherit; }
   display: flex;
   flex-direction: column;
   position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
   overflow-y: auto;
   z-index: 100;

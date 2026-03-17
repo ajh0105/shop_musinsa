@@ -8,6 +8,9 @@ import MyPage from '../views/MyPage.vue'
 import ProductDetail from '../views/ProductDetail.vue'
 import Checkout from '../views/Checkout.vue'
 import CartCheckout from '../views/CartCheckout.vue'
+import FAQ from '../views/FAQ.vue'
+import Board from '../views/Board.vue'
+import AllReviews from '../views/AllReviews.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -19,6 +22,11 @@ const routes = [
   { path: '/mypage', component: MyPage, meta: { requiresAuth: true } },
   { path: '/checkout', component: Checkout, meta: { requiresAuth: true } },
   { path: '/cart-checkout', component: CartCheckout, meta: { requiresAuth: true } },
+
+  // 게시판
+  { path: '/faq', component: FAQ },
+  { path: '/board', component: Board },
+  { path: '/reviews', component: AllReviews },
 
   // Admin routes
   {
@@ -33,6 +41,7 @@ const routes = [
       { path: 'orders', component: () => import('../views/admin/Orders.vue') },
       { path: 'reviews', component: () => import('../views/admin/Reviews.vue') },
       { path: 'qna', component: () => import('../views/admin/QnA.vue') },
+      { path: 'faq', component: () => import('../views/admin/Faq.vue') },
     ]
   }
 ]

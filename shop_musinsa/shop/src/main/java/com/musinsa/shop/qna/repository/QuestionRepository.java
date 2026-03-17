@@ -15,4 +15,6 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Optional<Question> findByIdAndMemberId(Integer id, Integer memberId);
 
     List<Question> findAllByOrderByCreatedAtDesc();
+
+    List<Question> findAllByItemIdIsNullOrderByCreatedAtDesc();
 }
