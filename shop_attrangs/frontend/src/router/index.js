@@ -16,7 +16,7 @@ const router = createRouter({
     { path: '/category/:category', name: 'category', component: CategoryView },
     { path: '/product/:id', name: 'product', component: ProductDetailView },
     { path: '/cart', name: 'cart', component: CartView },
-    { path: '/wishlist', name: 'wishlist', component: WishlistView },
+    { path: '/wishlist', name: 'wishlist', component: WishlistView, meta: { requiresAuth: true } },
     { path: '/login', name: 'login', component: LoginView },
     { path: '/join', name: 'join', component: JoinView },
     { path: '/checkout', name: 'checkout', component: CheckoutView, meta: { requiresAuth: true } },

@@ -65,7 +65,9 @@ let toastTimer = null
 async function onWish(item, event) {
   const added = await toggleWish(item, event)
   if (added) {
-    showToast(`'${item.name}' 장바구니에 담겼습니다 ♥`)
+    showToast(`'${item.name}' 찜 목록에 추가됐습니다 ♥`)
+  } else {
+    showToast(`'${item.name}' 찜을 해제했습니다.`)
   }
 }
 

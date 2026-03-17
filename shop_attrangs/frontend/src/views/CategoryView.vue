@@ -67,11 +67,11 @@ let toastTimer = null
 
 async function onWish(item, event) {
   const added = await toggleWish(item, event)
-  if (added) {
-    toastMsg.value = `'${item.name}' 장바구니에 담겼습니다 ♥`
-    clearTimeout(toastTimer)
-    toastTimer = setTimeout(() => { toastMsg.value = '' }, 2200)
-  }
+  toastMsg.value = added
+    ? `'${item.name}' 찜 목록에 추가됐습니다 ♥`
+    : `'${item.name}' 찜을 해제했습니다.`
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => { toastMsg.value = '' }, 2200)
 }
 
 const route = useRoute()
