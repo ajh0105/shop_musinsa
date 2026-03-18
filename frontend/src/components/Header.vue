@@ -48,7 +48,7 @@
           <!-- Auth links -->
           <template v-if="isLoggedIn">
             <div v-if="!isAdmin()" class="v-header__user-group">
-              <span class="v-grade-icon" :class="`v-grade-icon--${gradeKey}`" :title="gradeLabel">{{ gradeInitial }}</span>
+              <span class="v-grade-icon" :class="`v-grade-icon--${gradeKey}`" :title="gradeLabel" v-html="gradeIconSvg"></span>
               <span class="v-header__username">{{ userName || loginId }}</span>
             </div>
             <RouterLink v-if="isAdmin()" to="/admin" class="v-header__link v-header__link--admin">관리자</RouterLink>
@@ -70,7 +70,7 @@
             ref="searchInput"
             v-model="searchQuery"
             type="search"
-            placeholder="스카프, 향수, 가방을 검색하세요…"
+            placeholder="Search"
             class="v-search-input"
           />
           <button type="submit" class="v-search-submit">Search</button>
@@ -128,8 +128,21 @@ const GRADE_MAP = {
 }
 
 const gradeKey     = computed(() => GRADE_MAP[grade.value?.toUpperCase()] ? GRADE_MAP[grade.value.toUpperCase()].key : 'sapphire')
-const gradeInitial = computed(() => GRADE_MAP[grade.value?.toUpperCase()]?.initial || 'S')
 const gradeLabel   = computed(() => GRADE_MAP[grade.value?.toUpperCase()]?.label   || grade.value || 'Sapphire')
+
+const GRADE_ICONS = {
+  // Sapphire: 보석 컷 (gem facet) 형태
+  sapphire: `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12l5 8-11 13L1 10z"/><path d="M1 10h22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  // Ruby: 하트 (열정의 붉은 루비)
+  ruby:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+  // Emerald: 물방울/잎 (자연의 에메랄드)
+  emerald:  `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C10 5 4 10 4 15a8 8 0 0 0 16 0C20 10 14 5 12 2z"/></svg>`,
+  // Gold: 5각별 (황금의 별)
+  gold:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+  // Diamond: 4각 스파클 (다이아몬드 빛나는 형태)
+  diamond:  `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z"/></svg>`,
+}
+const gradeIconSvg = computed(() => GRADE_ICONS[gradeKey.value] || GRADE_ICONS.sapphire)
 
 watch(searchOpen, async (val) => {
   if (val) { await nextTick(); searchInput.value?.focus() }
