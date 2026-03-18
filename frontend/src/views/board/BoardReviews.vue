@@ -7,6 +7,9 @@
         <div class="review-head">
           <span class="review-author">{{ r.memberName }}</span>
           <span class="review-stars">{{ '★'.repeat(r.rating) }}{{ '☆'.repeat(5 - r.rating) }}</span>
+          <RouterLink v-if="r.itemId" :to="`/product/${r.itemId}`" class="review-product-link">
+            상품 보기
+          </RouterLink>
           <span class="review-date">{{ formatDate(r.createdAt) }}</span>
         </div>
         <p class="review-content">{{ r.content }}</p>
@@ -29,7 +32,7 @@ function formatDate(dt) {
 async function loadReviews() {
   loading.value = true
   try {
-    const res = await fetch('/v1/api/reviews', { credentials: 'include' })
+    const res = await fetch('/v1/api/reviews')
     if (res.ok) reviews.value = await res.json()
   } catch {} finally { loading.value = false }
 }
@@ -57,6 +60,15 @@ onMounted(loadReviews)
   color: #1a1a1a;
 }
 .review-stars { color: #F59E0B; font-size: 13px; }
+.review-product-link {
+  font-size: 12px;
+  color: #8b6914;
+  text-decoration: none;
+  background: #f0ebe8;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.review-product-link:hover { background: #e0d8cc; }
 .review-date { font-size: 12px; color: #aaa; margin-left: auto; }
 .review-content {
   font-size: 14px;
