@@ -124,7 +124,7 @@ const { onImgError } = useImgFallback()
 const route = useRoute()
 const { isLoggedIn } = useAuth()
 
-const ITEMS_PER_PAGE = 6
+const ITEMS_PER_PAGE = 15
 const loading = ref(false)
 const items = ref([])
 const currentPage = ref(1)

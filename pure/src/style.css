@@ -560,8 +560,8 @@ input, select, textarea { font-family: inherit; }
   gap: 20px;
 }
 .product-grid--category {
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
 }
 .product-row {
   display: grid;
@@ -1254,7 +1254,7 @@ input, select, textarea { font-family: inherit; }
 
 @media (max-width: 1024px) {
   .product-grid { grid-template-columns: repeat(3, 1fr); }
-  .product-grid--category { grid-template-columns: repeat(2, 1fr); }
+  .product-grid--category { grid-template-columns: repeat(3, 1fr); }
   .product-row { grid-template-columns: repeat(4, 1fr); }
   .banner-slide { padding: 0 40px; height: 300px; }
   .banner-image-area { display: none; }
