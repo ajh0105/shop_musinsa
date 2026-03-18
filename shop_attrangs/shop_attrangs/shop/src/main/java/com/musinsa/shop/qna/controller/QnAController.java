@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/v1/api/qna")
 @RequiredArgsConstructor
@@ -17,6 +15,17 @@ public class QnAController {
 
     private final QnAService qnAService;
     private final SecurityUtil securityUtil;
+
+    /** 전체 Q&A 목록 (커뮤니티 페이지용, 비밀글 내용 마스킹 적용) */
+    @GetMapping("/all")
+    public ResponseEntity<?> all() {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        boolean isAdmin = securityUtil.isAdmin();
+        if (isAdmin) {
+            return ResponseEntity.ok(qnAService.findAll());
+        }
+        return ResponseEntity.ok(qnAService.findAllForPublic(memberId));
+    }
 
     /** 상품별 Q&A 목록 */
     @GetMapping("/item/{itemId}")

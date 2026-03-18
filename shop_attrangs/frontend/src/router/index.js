@@ -8,6 +8,7 @@ import CartView from '../views/CartView.vue'
 import WishlistView from '../views/WishlistView.vue'
 import CheckoutView from '../views/CheckoutView.vue'
 import MyPageView from '../views/MyPageView.vue'
+import CommunityView from '../views/CommunityView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,6 +22,7 @@ const router = createRouter({
     { path: '/join', name: 'join', component: JoinView },
     { path: '/checkout', name: 'checkout', component: CheckoutView, meta: { requiresAuth: true } },
     { path: '/mypage', name: 'mypage', component: MyPageView, meta: { requiresAuth: true } },
+    { path: '/community', name: 'community', component: CommunityView },
 
     // 관리자 라우트
     {

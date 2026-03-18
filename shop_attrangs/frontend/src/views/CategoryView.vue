@@ -19,10 +19,13 @@
             <h3>{{ item.name }}</h3>
             <div class="item-price-row">
               <div class="price-stack">
-                <p class="item-sale-price">{{ Number(item.salePrice ?? item.price).toLocaleString() }}원</p>
-                <span v-if="item.salePrice && item.salePrice < item.price" class="item-origin-price">
+                <p :class="item.discountPer > 0 ? 'item-sale-price' : 'item-normal-price'">
+                  {{ Number(item.discountPer > 0 ? item.salePrice : item.price).toLocaleString() }}원
+                </p>
+                <span v-if="item.discountPer > 0" class="item-origin-price">
                   {{ Number(item.price).toLocaleString() }}원
                 </span>
+                <span v-if="item.discountPer > 0" class="item-discount-badge">-{{ item.discountPer }}%</span>
               </div>
               <button
                 class="wish-btn"

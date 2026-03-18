@@ -28,6 +28,7 @@
       >
         {{ category }}
       </router-link>
+      <router-link to="/community" class="community-link">리뷰/Q&A</router-link>
     </nav>
   </header>
 </template>
@@ -95,5 +96,13 @@ async function handleLogout() {
   justify-content: center;
   padding: 0 3px;
   line-height: 1;
+}
+.community-link {
+  font-weight: 600;
+  color: var(--point) !important;
+  border-color: rgba(190,77,37,0.35) !important;
+}
+.community-link:hover {
+  background: rgba(190,77,37,0.06);
 }
 </style>

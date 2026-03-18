@@ -96,6 +96,12 @@ public class BaseQnAService implements QnAService {
     }
 
     @Override
+    public List<QuestionRead> findAllForPublic(Integer currentMemberId) {
+        return questionRepository.findAllByOrderByCreatedAtDesc()
+                .stream().map(q -> toRead(q, currentMemberId, false)).toList();
+    }
+
+    @Override
     public QuestionRead answer(Integer id, AnswerRequest req, Integer adminId) {
         return questionRepository.findById(id).map(q -> {
             q.setAnswerContent(req.getAnswerContent());
