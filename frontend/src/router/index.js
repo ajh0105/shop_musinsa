@@ -20,6 +20,12 @@ const routes = [
   { path: '/checkout', component: Checkout, meta: { requiresAuth: true } },
   { path: '/cart-checkout', component: CartCheckout, meta: { requiresAuth: true } },
 
+  // Inquiry detail (must be before /board layout to avoid child route conflicts)
+  {
+    path: '/board/inquiry/:id',
+    component: () => import('../views/board/InquiryDetail.vue'),
+  },
+
   // Board routes
   {
     path: '/board',

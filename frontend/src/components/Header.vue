@@ -19,24 +19,8 @@
           <span class="v-header__logo-kr">벙딸리제</span>
         </RouterLink>
 
-        <!-- Right: Auth + Icons -->
+        <!-- Right: Icons + Auth -->
         <div class="v-header__right">
-          <!-- Auth links -->
-          <template v-if="isLoggedIn">
-            <div class="v-header__user-group">
-              <span class="v-grade-icon" :class="`v-grade-icon--${gradeKey}`" :title="gradeLabel">{{ gradeInitial }}</span>
-              <span class="v-header__username">{{ userName || loginId }}</span>
-            </div>
-            <RouterLink v-if="isAdmin()" to="/admin" class="v-header__link v-header__link--admin">Admin</RouterLink>
-            <button class="v-header__link" @click="handleLogout">Sign out</button>
-          </template>
-          <template v-else>
-            <RouterLink to="/login" class="v-header__link">Sign in</RouterLink>
-            <RouterLink to="/register" class="v-header__link">Join</RouterLink>
-          </template>
-
-          <div class="v-header__icon-divider"></div>
-
           <!-- Search toggle -->
           <button class="v-header__icon-btn" @click="searchOpen = !searchOpen" aria-label="Search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -58,6 +42,22 @@
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
           </RouterLink>
+
+          <div class="v-header__icon-divider"></div>
+
+          <!-- Auth links -->
+          <template v-if="isLoggedIn">
+            <div v-if="!isAdmin()" class="v-header__user-group">
+              <span class="v-grade-icon" :class="`v-grade-icon--${gradeKey}`" :title="gradeLabel">{{ gradeInitial }}</span>
+              <span class="v-header__username">{{ userName || loginId }}</span>
+            </div>
+            <RouterLink v-if="isAdmin()" to="/admin" class="v-header__link v-header__link--admin">관리자</RouterLink>
+            <button class="v-header__link" @click="handleLogout">Log out</button>
+          </template>
+          <template v-else>
+            <RouterLink to="/login" class="v-header__link">Log in</RouterLink>
+            <RouterLink to="/register" class="v-header__link">Join</RouterLink>
+          </template>
         </div>
       </div>
     </div>
@@ -180,10 +180,10 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   background: #1B3A2D;
   color: #F5F0E8;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 0.7rem;
   font-family: 'Inter', sans-serif;
   letter-spacing: 0.06em;
-  padding: 8px 16px;
+  padding: 5px 16px;
 }
 
 /* ── Main Header ── */
@@ -249,7 +249,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   margin: 0 2px;
 }
 .v-header__link {
-  font-size: 1.1rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.05em;
   color: #7A7269;
@@ -271,7 +271,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   gap: 6px;
 }
 .v-header__username {
-  font-size: 1.1rem;
+  font-size: 0.75rem;
   color: #111;
   font-weight: 500;
 }
