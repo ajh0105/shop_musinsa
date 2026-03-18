@@ -5,7 +5,10 @@
     <div class="admin-toolbar">
       <select v-model="statusFilter" class="admin-search" @change="loadOrders">
         <option value="">전체</option>
-        <option value="PAID">결제완료</option>
+        <option value="PENDING">결제 대기</option>
+        <option value="PAID">결제 확인</option>
+        <option value="SHIPPING">배송중</option>
+        <option value="DELIVERED">배송완료</option>
         <option value="CANCELLED">취소됨</option>
       </select>
       <div class="stats-mini">
@@ -31,13 +34,16 @@
             <td>{{ o.payment }}</td>
             <td>
               <span class="order-status" :class="`status-${o.status?.toLowerCase()}`">
-                {{ o.status === 'PAID' ? '결제완료' : o.status === 'CANCELLED' ? '취소됨' : o.status }}
+                {{ statusLabel(o.status) }}
               </span>
             </td>
             <td>{{ formatDate(o.createdAt) }}</td>
             <td class="action-cell">
               <select class="grade-select" :value="o.status" @change="changeStatus(o.id, $event.target.value)">
-                <option value="PAID">결제완료</option>
+                <option value="PENDING">결제 대기</option>
+                <option value="PAID">결제 확인</option>
+                <option value="SHIPPING">배송중</option>
+                <option value="DELIVERED">배송완료</option>
                 <option value="CANCELLED">취소됨</option>
               </select>
             </td>
@@ -56,14 +62,30 @@ const orders = ref([])
 const statusFilter = ref('')
 const toast = ref('')
 
+// PAID, SHIPPING, DELIVERED 주문만 매출 집계
 const totalSales = computed(() =>
-  orders.value.filter(o => o.status === 'PAID').reduce((s, o) => s + (o.amount || 0), 0)
+  orders.value
+    .filter(o => ['PAID', 'SHIPPING', 'DELIVERED'].includes(o.status))
+    .reduce((s, o) => s + (o.amount || 0), 0)
 )
+
+const STATUS_LABELS = {
+  PENDING:   '결제 대기',
+  PAID:      '결제 확인',
+  SHIPPING:  '배송중',
+  DELIVERED: '배송완료',
+  CANCELLED: '취소됨',
+}
+
+function statusLabel(status) {
+  return STATUS_LABELS[status] || status
+}
 
 function showToast(msg) {
   toast.value = msg
   setTimeout(() => { toast.value = '' }, 2000)
 }
+
 function formatDate(dt) {
   if (!dt) return ''
   return new Date(dt).toLocaleDateString('ko-KR')

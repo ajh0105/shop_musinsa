@@ -77,7 +77,7 @@
               <td>{{ order.amount?.toLocaleString() }}원</td>
               <td>
                 <span class="order-status" :class="`status-${order.status?.toLowerCase()}`">
-                  {{ order.status === 'PAID' ? '결제완료' : '취소됨' }}
+                  {{ statusLabel(order.status) }}
                 </span>
               </td>
               <td>{{ formatDate(order.createdAt) }}</td>
@@ -94,6 +94,12 @@ import { ref, onMounted } from 'vue'
 
 const stats = ref({})
 const loading = ref(true)
+
+const STATUS_LABELS = {
+  PENDING: '결제 대기', PAID: '결제 확인',
+  SHIPPING: '배송중', DELIVERED: '배송완료', CANCELLED: '취소됨',
+}
+function statusLabel(s) { return STATUS_LABELS[s] || s }
 
 function formatDate(dt) {
   if (!dt) return ''
