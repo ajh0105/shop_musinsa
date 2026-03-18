@@ -3,7 +3,7 @@
 
     <!-- ── Announcement Bar ── -->
     <div class="v-header__announce">
-      <span>Complimentary shipping on orders over ₩100,000 &nbsp;·&nbsp; 신규 회원 첫 구매 15% 할인</span>
+      <span>₩100,000 이상 구매 시 무료 배송 &nbsp;·&nbsp; 신규 회원 첫 구매 15% 할인</span>
     </div>
 
     <!-- ── Main Header ── -->
@@ -16,7 +16,6 @@
         <!-- Center: Logo -->
         <RouterLink to="/" class="v-header__logo">
           <span class="v-header__logo-en">VENTALIZE</span>
-          <span class="v-header__logo-kr">벙딸리제</span>
         </RouterLink>
 
         <!-- Right: Icons + Auth -->
@@ -231,7 +230,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 }
 .v-header__logo-en {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 1.35rem;
+  font-size: 1.75rem;
   font-weight: 400;
   letter-spacing: 0.35em;
   color: #111;

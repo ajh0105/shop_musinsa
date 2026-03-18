@@ -34,6 +34,7 @@ const routes = [
       { path: '', redirect: '/board/faq' },
       { path: 'faq', component: () => import('../views/board/Faq.vue') },
       { path: 'inquiry', component: () => import('../views/board/Inquiry.vue') },
+      { path: 'reviews', component: () => import('../views/board/BoardReviews.vue') },
     ]
   },
 
