@@ -20,6 +20,4 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findByCategoryAndIdNot(String category, Integer id);
 
     List<Item> findByNameContainingOrBrandContaining(String name, String brand);
-
-    long countByCategory(String category);
 }
