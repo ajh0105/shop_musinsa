@@ -26,35 +26,64 @@
       <!-- ── 주문 내역 ── -->
       <div v-if="activeTab === 'orders'">
         <div v-if="orders.length === 0" class="empty">주문 내역이 없습니다.</div>
-        <div v-else class="order-list">
-          <div v-for="order in orders" :key="order.id" class="order-card">
-            <div class="order-meta">
-              <span class="order-id">주문 #{{ order.id }}</span>
-              <span class="order-date">{{ formatDate(order.createdAt) }}</span>
-              <span class="order-status-badge" :class="statusClass(order.status)">{{ statusLabel(order.status) }}</span>
+        <div v-else class="order-table-wrap">
+          <!-- 리스트 헤더 -->
+          <div class="order-table-head">
+            <span class="ot-id">주문번호</span>
+            <span class="ot-date">주문일</span>
+            <span class="ot-summary">대표 상품</span>
+            <span class="ot-amount">결제금액</span>
+            <span class="ot-status">상태</span>
+            <span class="ot-arrow"></span>
+          </div>
+
+          <!-- 리스트 행 + 클릭 시 상세 카드 펼침 -->
+          <div v-for="order in orders" :key="order.id" class="order-row-wrap">
+            <!-- 리스트 행 -->
+            <div class="order-table-row" @click="toggleOrder(order.id)"
+              :class="{ expanded: openOrderId === order.id }">
+              <span class="ot-id">#{{ order.id }}</span>
+              <span class="ot-date">{{ formatDate(order.createdAt) }}</span>
+              <span class="ot-summary">
+                {{ order.items?.[0]?.name || '-' }}
+                <em v-if="order.items?.length > 1"> 외 {{ order.items.length - 1 }}건</em>
+              </span>
+              <span class="ot-amount">{{ Number(order.amount).toLocaleString() }}원</span>
+              <span class="ot-status">
+                <span class="order-status-badge" :class="statusClass(order.status)">{{ statusLabel(order.status) }}</span>
+              </span>
+              <span class="ot-arrow">{{ openOrderId === order.id ? '▲' : '▼' }}</span>
             </div>
-            <!-- 배송 단계 진행바 -->
-            <div class="order-progress">
-              <div v-for="(step, idx) in ORDER_STEPS" :key="step.key"
-                class="order-step"
-                :class="{ active: isStepActive(order.status, idx), done: isStepDone(order.status, idx) }">
-                <div class="step-dot"></div>
-                <span class="step-label">{{ step.label }}</span>
-              </div>
-            </div>
-            <div class="order-items">
-              <div v-for="item in order.items" :key="item.id" class="order-item-row">
-                <img :src="item.imgPath" :alt="item.name" class="order-thumb" />
-                <div>
-                  <p class="order-item-name">{{ item.name }}</p>
-                  <p class="order-item-price">{{ Number(item.salePrice ?? item.price).toLocaleString() }}원</p>
+
+            <!-- 상세 카드 (아코디언) -->
+            <Transition name="slide-down">
+              <div v-if="openOrderId === order.id" class="order-detail-card">
+                <!-- 배송 단계 진행바 -->
+                <div class="order-progress">
+                  <div v-for="(step, idx) in ORDER_STEPS" :key="step.key"
+                    class="order-step"
+                    :class="{ active: isStepActive(order.status, idx), done: isStepDone(order.status, idx) }">
+                    <div class="step-dot"></div>
+                    <span class="step-label">{{ step.label }}</span>
+                  </div>
+                </div>
+                <!-- 주문 상품 목록 -->
+                <div class="order-items">
+                  <div v-for="item in order.items" :key="item.id" class="order-item-row">
+                    <img :src="item.imgPath" :alt="item.name" class="order-thumb" />
+                    <div>
+                      <p class="order-item-name">{{ item.name }}</p>
+                      <p class="order-item-price">{{ Number(item.salePrice ?? item.price).toLocaleString() }}원</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- 결제 정보 -->
+                <div class="order-footer">
+                  <span class="order-payment">{{ paymentLabel(order.payment) }}</span>
+                  <span class="order-amount">총 {{ Number(order.amount).toLocaleString() }}원</span>
                 </div>
               </div>
-            </div>
-            <div class="order-footer">
-              <span class="order-payment">{{ paymentLabel(order.payment) }}</span>
-              <span class="order-amount">총 {{ Number(order.amount).toLocaleString() }}원</span>
-            </div>
+            </Transition>
           </div>
         </div>
       </div>
@@ -199,6 +228,8 @@ const tabs = [
 
 /* ─── 주문 내역 ─── */
 const orders = ref([])
+const openOrderId = ref(null)
+function toggleOrder(id) { openOrderId.value = openOrderId.value === id ? null : id }
 const ORDER_STEPS = [
   { key: 'PAYMENT_DONE', label: '결제완료' },
   { key: 'PREPARING',    label: '상품준비중' },
@@ -374,30 +405,52 @@ onMounted(() => {
 .mypage-tab:hover { color: #333; }
 .mypage-tab.active { color: var(--point); border-bottom-color: var(--point); }
 
-/* ── 주문 내역 ── */
-.order-list { display: flex; flex-direction: column; gap: 20px; }
-.order-card {
+/* ── 주문 내역 (테이블 리스트) ── */
+.order-table-wrap {
   border: 1px solid #eee;
   border-radius: 12px;
-  padding: 20px;
-  background: #fafafa;
+  overflow: hidden;
 }
-.order-meta {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 14px;
-  padding-bottom: 12px;
+.order-table-head {
+  display: grid;
+  grid-template-columns: 80px 100px 1fr 120px 110px 32px;
+  padding: 12px 20px;
+  background: #f5f0eb;
+  font-size: 12px;
+  font-weight: 700;
+  color: #777;
   border-bottom: 1px solid #eee;
-  font-size: 13px;
-  color: #555;
 }
-.order-id { font-weight: 700; color: #111; }
+.order-row-wrap { border-bottom: 1px solid #f0f0f0; }
+.order-row-wrap:last-child { border-bottom: none; }
+
+.order-table-row {
+  display: grid;
+  grid-template-columns: 80px 100px 1fr 120px 110px 32px;
+  padding: 14px 20px;
+  align-items: center;
+  cursor: pointer;
+  font-size: 13px;
+  color: #444;
+  transition: background 0.15s;
+}
+.order-table-row:hover { background: #fdf8f5; }
+.order-table-row.expanded { background: #fdf5f0; }
+
+.ot-id { font-weight: 700; color: #111; font-size: 13px; }
+.ot-date { color: #888; font-size: 12px; }
+.ot-summary { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 12px; }
+.ot-summary em { color: #aaa; font-style: normal; font-size: 12px; }
+.ot-amount { font-weight: 700; color: #111; }
+.ot-status { }
+.ot-arrow { color: #bbb; font-size: 11px; text-align: right; }
+
 .order-status-badge {
-  margin-left: auto;
+  display: inline-block;
   padding: 3px 10px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
   color: #fff;
 }
 .st-payment   { background: #888; }
@@ -406,11 +459,18 @@ onMounted(() => {
 .st-delivered { background: #27ae60; }
 .st-confirmed { background: #111; }
 
+/* 상세 카드 */
+.order-detail-card {
+  padding: 20px 24px;
+  background: #fafafa;
+  border-top: 1px solid #f0ece8;
+}
+
 /* 배송 진행바 */
 .order-progress {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   position: relative;
 }
 .order-progress::before {
@@ -459,6 +519,11 @@ onMounted(() => {
   font-size: 14px;
 }
 .order-amount { font-weight: 700; font-size: 15px; color: #111; }
+
+/* 슬라이드 애니메이션 */
+.slide-down-enter-active { transition: all 0.22s ease; }
+.slide-down-leave-active { transition: all 0.18s ease; }
+.slide-down-enter-from, .slide-down-leave-to { opacity: 0; transform: translateY(-6px); }
 
 /* ── 프로필 ── */
 .profile-card {
