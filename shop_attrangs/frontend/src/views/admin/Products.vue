@@ -78,7 +78,11 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">이미지</label>
+            <label class="form-label">이미지 URL</label>
+            <input v-model="form.imgUrl" class="form-input" placeholder="https://... (파일 업로드 시 무시됨)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">이미지 파일 (선택)</label>
             <input type="file" accept="image/*" @change="onImageChange" class="form-input" />
             <img v-if="imagePreview" :src="imagePreview" class="image-preview" />
           </div>
@@ -108,7 +112,7 @@ const imagePreview = ref(null)
 const toast = ref('')
 
 const categories = ['Best', '원피스', '상의', '하의', '아우터', '악세잡화', '오늘의 할인']
-const form = ref({ brand: '', name: '', category: '상의', description: '', price: 0, discountPer: 0, stockCount: 0 })
+const form = ref({ brand: '', name: '', category: '상의', description: '', price: 0, discountPer: 0, stockCount: 0, imgUrl: '' })
 
 function showToast(msg) {
   toast.value = msg
@@ -127,7 +131,7 @@ async function loadProducts() {
 
 function openAddModal() {
   editTarget.value = null
-  form.value = { brand: '', name: '', category: '상의', description: '', price: 0, discountPer: 0, stockCount: 0 }
+  form.value = { brand: '', name: '', category: '상의', description: '', price: 0, discountPer: 0, stockCount: 0, imgUrl: '' }
   imageFile.value = null
   imagePreview.value = null
   showModal.value = true
@@ -135,7 +139,7 @@ function openAddModal() {
 
 function openEditModal(p) {
   editTarget.value = p
-  form.value = { brand: p.brand, name: p.name, category: p.category, description: p.description || '', price: p.price, discountPer: p.discountPer, stockCount: p.stockCount }
+  form.value = { brand: p.brand, name: p.name, category: p.category, description: p.description || '', price: p.price, discountPer: p.discountPer, stockCount: p.stockCount, imgUrl: p.imgPath || '' }
   imageFile.value = null
   imagePreview.value = p.imgPath
   showModal.value = true

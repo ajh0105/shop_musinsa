@@ -13,4 +13,5 @@ public class ItemCreateRequest {
     private Integer price;
     private Integer discountPer;
     private Integer stockCount;
+    private String imgUrl;
 }

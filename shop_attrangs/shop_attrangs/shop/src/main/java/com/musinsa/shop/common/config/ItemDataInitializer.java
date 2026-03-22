@@ -23,20 +23,36 @@ public class ItemDataInitializer implements CommandLineRunner {
     private static final String IMG_BASE = "https://picsum.photos/seed/";
     private static final String IMG_SUFFIX = "/420/560";
 
+    private static final String[][] CATEGORIES = {
+            {"원피스", "101", "false"},
+            {"상의",   "201", "false"},
+            {"하의",   "301", "false"},
+            {"아우터", "401", "false"},
+            {"악세잡화", "501", "false"},
+            {"오늘의 할인", "601", "true"},
+    };
+
     @Override
     public void run(String... args) {
-        if (itemRepository.count() > 0) {
-            log.info("상품 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
+        List<Item> items = new ArrayList<>();
+
+        if (itemRepository.countByCategory("원피스") == 0)
+            items.addAll(createCategory("원피스", 101, DRESS_NAMES, DRESS_PRICES, false));
+        if (itemRepository.countByCategory("상의") == 0)
+            items.addAll(createCategory("상의", 201, TOP_NAMES, TOP_PRICES, false));
+        if (itemRepository.countByCategory("하의") == 0)
+            items.addAll(createCategory("하의", 301, BOTTOM_NAMES, BOTTOM_PRICES, false));
+        if (itemRepository.countByCategory("아우터") == 0)
+            items.addAll(createCategory("아우터", 401, OUTER_NAMES, OUTER_PRICES, false));
+        if (itemRepository.countByCategory("악세잡화") == 0)
+            items.addAll(createCategory("악세잡화", 501, ACC_NAMES, ACC_PRICES, false));
+        if (itemRepository.countByCategory("오늘의 할인") == 0)
+            items.addAll(createCategory("오늘의 할인", 601, SALE_NAMES, SALE_PRICES, true));
+
+        if (items.isEmpty()) {
+            log.info("모든 카테고리에 상품 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
             return;
         }
-
-        List<Item> items = new ArrayList<>();
-        items.addAll(createCategory("원피스", 101, DRESS_NAMES, DRESS_PRICES, false));
-        items.addAll(createCategory("상의",   201, TOP_NAMES,   TOP_PRICES,   false));
-        items.addAll(createCategory("하의",   301, BOTTOM_NAMES, BOTTOM_PRICES, false));
-        items.addAll(createCategory("아우터", 401, OUTER_NAMES, OUTER_PRICES, false));
-        items.addAll(createCategory("악세잡화", 501, ACC_NAMES, ACC_PRICES, false));
-        items.addAll(createCategory("오늘의 할인", 601, SALE_NAMES, SALE_PRICES, true));
 
         itemRepository.saveAll(items);
         log.info("상품 데이터 초기화 완료: {}개 등록", items.size());

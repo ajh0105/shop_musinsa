@@ -42,9 +42,14 @@ public class AdminItemController {
             return ResponseEntity.badRequest().body("Invalid category.");
         }
 
-        String imgPath = (image != null && !image.isEmpty())
-                ? fileStorageService.store(image)
-                : "https://picsum.photos/seed/new/400/500";
+        String imgPath;
+        if (image != null && !image.isEmpty()) {
+            imgPath = fileStorageService.store(image);
+        } else if (StringUtils.hasLength(req.getImgUrl())) {
+            imgPath = req.getImgUrl();
+        } else {
+            imgPath = "https://picsum.photos/seed/new/400/500";
+        }
 
         Item item = Item.builder()
                 .brand(req.getBrand())
@@ -84,6 +89,8 @@ public class AdminItemController {
             if (image != null && !image.isEmpty()) {
                 fileStorageService.delete(item.getImgPath());
                 item.setImgPath(fileStorageService.store(image));
+            } else if (StringUtils.hasLength(req.getImgUrl())) {
+                item.setImgPath(req.getImgUrl());
             }
             return ResponseEntity.ok(itemRepository.save(item).toRead());
         }).orElse(ResponseEntity.notFound().build());

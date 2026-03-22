@@ -30,9 +30,11 @@
     </aside>
     <div class="admin-content">
       <RouterView />
+      <FooterSplit />
     </div>
   </div>
 </template>
 
 <script setup>
+import FooterSplit from '../../components/FooterSplit.vue'
 </script>
