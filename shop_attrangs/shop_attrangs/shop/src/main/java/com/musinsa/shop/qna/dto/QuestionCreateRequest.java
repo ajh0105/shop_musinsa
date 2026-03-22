@@ -10,4 +10,5 @@ public class QuestionCreateRequest {
     private String title;
     private String content;
     private Boolean isSecret;
+    private String qnaPassword;
 }

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/v1/api/qna")
 @RequiredArgsConstructor
@@ -25,6 +27,14 @@ public class QnAController {
             return ResponseEntity.ok(qnAService.findAll());
         }
         return ResponseEntity.ok(qnAService.findAllForPublic(memberId));
+    }
+
+    /** Q&A 비밀번호 확인 */
+    @PostMapping("/{id}/verify-password")
+    public ResponseEntity<?> verifyPassword(@PathVariable Integer id, @RequestBody Map<String, String> body) {
+        String pw = body.getOrDefault("password", "");
+        boolean ok = qnAService.verifyPassword(id, pw);
+        return ok ? ResponseEntity.ok().build() : ResponseEntity.status(403).build();
     }
 
     /** 상품별 Q&A 목록 */

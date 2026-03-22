@@ -14,6 +14,7 @@ public interface QnAService {
     boolean delete(Integer id, Integer memberId);
     List<QuestionRead> findAll();
     List<QuestionRead> findAllForPublic(Integer currentMemberId);
+    boolean verifyPassword(Integer id, String password);
     QuestionRead answer(Integer id, AnswerRequest req, Integer adminId);
     boolean adminDelete(Integer id);
 }

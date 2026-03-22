@@ -65,7 +65,7 @@ public class Item {
                 .description(description)
                 .price(price)
                 .discountPer(discountPer)
-                .salePrice(price * (100 - discountPer) / 100)
+                .salePrice(discountPer != null && discountPer > 0 ? price * (100 - discountPer) / 100 : null)
                 .stockCount(stockCount)
                 .viewCount(viewCount)
                 .isSoldOut(stockCount != null && stockCount <= 0)

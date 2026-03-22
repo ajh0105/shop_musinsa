@@ -38,6 +38,9 @@ public class Question {
     @Builder.Default
     private Boolean isAnswered = false;
 
+    @Column(length = 100)
+    private String qnaPassword;
+
     @Column(columnDefinition = "TEXT")
     private String answerContent;
 

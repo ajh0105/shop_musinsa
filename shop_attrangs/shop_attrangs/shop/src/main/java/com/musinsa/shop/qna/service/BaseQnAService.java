@@ -41,6 +41,7 @@ public class BaseQnAService implements QnAService {
                 .content(canSeeContent ? q.getContent() : "비밀 문의입니다.")
                 .isSecret(q.getIsSecret())
                 .isAnswered(q.getIsAnswered())
+                .hasPassword(q.getQnaPassword() != null && !q.getQnaPassword().isEmpty())
                 .answerContent(canSeeContent ? q.getAnswerContent() : null)
                 .answeredAt(q.getAnsweredAt())
                 .createdAt(q.getCreatedAt())
@@ -61,12 +62,14 @@ public class BaseQnAService implements QnAService {
 
     @Override
     public QuestionRead save(QuestionCreateRequest req, Integer memberId) {
+        String pw = req.getQnaPassword();
         Question q = Question.builder()
                 .memberId(memberId)
                 .itemId(req.getItemId())
                 .title(req.getTitle())
                 .content(req.getContent())
                 .isSecret(req.getIsSecret() != null && req.getIsSecret())
+                .qnaPassword(pw != null && !pw.isBlank() ? pw : null)
                 .build();
         return toRead(questionRepository.save(q), memberId, false);
     }
@@ -110,6 +113,14 @@ public class BaseQnAService implements QnAService {
             q.setAnsweredAt(LocalDateTime.now());
             return toRead(questionRepository.save(q), null, true);
         }).orElse(null);
+    }
+
+    @Override
+    public boolean verifyPassword(Integer id, String password) {
+        return questionRepository.findById(id)
+                .map(q -> q.getQnaPassword() == null || q.getQnaPassword().isEmpty()
+                        || q.getQnaPassword().equals(password))
+                .orElse(false);
     }
 
     @Override

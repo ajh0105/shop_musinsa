@@ -17,6 +17,7 @@ public class QuestionRead {
     private String content;
     private Boolean isSecret;
     private Boolean isAnswered;
+    private Boolean hasPassword;
     private String answerContent;
     private LocalDateTime answeredAt;
     private LocalDateTime createdAt;

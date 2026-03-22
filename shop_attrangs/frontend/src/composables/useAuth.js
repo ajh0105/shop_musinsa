@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { api } from '../api'
+import { clearWishlist } from './useWishCart.js'
 
 // 모듈 스코프 싱글턴 상태 (전체 앱에서 공유)
 const isLoggedIn = ref(!!localStorage.getItem('at_loginId'))
@@ -26,6 +27,7 @@ export function useAuth() {
     localStorage.removeItem('at_loginId')
     localStorage.removeItem('at_userName')
     localStorage.removeItem('at_role')
+    clearWishlist()
   }
 
   async function checkLoginStatus() {

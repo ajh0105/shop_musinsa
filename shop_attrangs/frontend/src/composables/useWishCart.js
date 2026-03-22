@@ -21,6 +21,12 @@ export async function syncWishlistFromServer() {
   }
 }
 
+// 로그아웃 시 찜 목록 초기화
+export function clearWishlist() {
+  wishedIds.value = new Set()
+  localStorage.removeItem('attrangs_wish')
+}
+
 // 앱 로드 시 로그인 상태라면 즉시 동기화
 if (localStorage.getItem('at_loginId')) {
   syncWishlistFromServer()
