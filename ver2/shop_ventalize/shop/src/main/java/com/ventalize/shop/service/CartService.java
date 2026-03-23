@@ -47,4 +47,22 @@ public class CartService{
     public void save(Cart cart) {
         cartRepository.save(cart);
     }
+
+    // 수량 1 증가
+    @Transactional
+    public void incrementQty(Integer memberId, Integer itemId) {
+        cartRepository.findByMemberIdAndItemId(memberId, itemId).ifPresent(cart -> {
+            cart.incrementQuantity();
+            cartRepository.save(cart);
+        });
+    }
+
+    // 수량 직접 지정
+    @Transactional
+    public void updateQty(Integer memberId, Integer itemId, Integer qty) {
+        cartRepository.findByMemberIdAndItemId(memberId, itemId).ifPresent(cart -> {
+            cart.setQuantity(qty);
+            cartRepository.save(cart);
+        });
+    }
 }

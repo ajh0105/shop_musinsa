@@ -48,7 +48,7 @@ public class ItemService {
     }
 
     public List<ItemRead> search(String keyword) {
-        return itemRepository.findByNameContainingOrBrandContaining(keyword, keyword)
+        return itemRepository.findByNameContaining(keyword)
                 .stream().map(Item::toRead).toList();
     }
 

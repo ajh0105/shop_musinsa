@@ -40,6 +40,7 @@ public class CartController {
                 .map(c -> CartItemResponse.builder()
                         .id(c.getId())
                         .itemId(c.getItemId())
+                        .quantity(c.getQuantity())
                         .item(itemMap.get(c.getItemId()))
                         .build())
                 .toList();
@@ -56,8 +57,18 @@ public class CartController {
         if (existing == null) {
             cartService.save(cartReq.toEntity(memberId));
         } else {
-            return ResponseEntity.status(409).body("이미 장바구니에 담긴 상품입니다.");
+            cartService.incrementQty(memberId, cartReq.getItemId());
         }
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/api/cart/item/{itemId}/qty")
+    public ResponseEntity<?> updateQty(@PathVariable Integer itemId, @RequestBody Map<String, Integer> body) {
+        Integer memberId = securityUtil.getCurrentMemberId();
+        if (memberId == null) return ResponseEntity.status(401).build();
+        Integer qty = body.get("quantity");
+        if (qty == null || qty < 1) return ResponseEntity.badRequest().build();
+        cartService.updateQty(memberId, itemId, qty);
         return ResponseEntity.ok().build();
     }
 

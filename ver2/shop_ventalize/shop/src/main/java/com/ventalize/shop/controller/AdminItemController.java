@@ -26,7 +26,7 @@ public class AdminItemController {
     public ResponseEntity<?> list(@RequestParam(required = false) String keyword) {
         List<Item> items;
         if (StringUtils.hasLength(keyword)) {
-            items = itemRepository.findByNameContainingOrBrandContaining(keyword, keyword);
+            items = itemRepository.findByNameContaining(keyword);
         } else {
             items = itemRepository.findAll();
         }
@@ -43,7 +43,6 @@ public class AdminItemController {
                 : "https://picsum.photos/seed/new/400/500";
 
         Item item = Item.builder()
-                .brand(req.getBrand())
                 .name(req.getName())
                 .category(req.getCategory())
                 .description(req.getDescription())
@@ -64,7 +63,6 @@ public class AdminItemController {
             @RequestPart("data") ItemCreateRequest req,
             @RequestPart(value = "image", required = false) MultipartFile image) {
         return itemRepository.findById(id).map(item -> {
-            if (StringUtils.hasLength(req.getBrand())) item.setBrand(req.getBrand());
             if (StringUtils.hasLength(req.getName())) item.setName(req.getName());
             if (StringUtils.hasLength(req.getCategory())) item.setCategory(req.getCategory());
             if (StringUtils.hasLength(req.getDescription())) item.setDescription(req.getDescription());

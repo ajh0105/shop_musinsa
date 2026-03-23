@@ -10,5 +10,6 @@ public class CartItemResponse {
 
     private Integer id;       // cart row id
     private Integer itemId;
+    private Integer quantity;
     private ItemRead item;
 }
