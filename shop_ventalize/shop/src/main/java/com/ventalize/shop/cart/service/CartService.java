@@ -21,4 +21,10 @@ public interface CartService {
 
     // 장바구니 데이터 저장(특정 회원의 특정 상품)
     void save(Cart cart);
+
+    // 수량 1 증가
+    void incrementQty(Integer memberId, Integer itemId);
+
+    // 수량 직접 설정
+    void updateQty(Integer memberId, Integer itemId, Integer quantity);
 }

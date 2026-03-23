@@ -9,4 +9,5 @@ public class CartRead {
 
     private Integer id;
     private Integer itemId;
+    private Integer quantity;
 }

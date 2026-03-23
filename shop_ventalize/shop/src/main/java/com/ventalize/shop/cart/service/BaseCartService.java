@@ -52,4 +52,22 @@ public class BaseCartService implements CartService{
     public void save(Cart cart) {
         cartRepository.save(cart);
     }
+
+    @Override
+    @Transactional
+    public void incrementQty(Integer memberId, Integer itemId) {
+        cartRepository.findByMemberIdAndItemId(memberId, itemId).ifPresent(cart -> {
+            cart.incrementQuantity();
+            cartRepository.save(cart);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void updateQty(Integer memberId, Integer itemId, Integer quantity) {
+        cartRepository.findByMemberIdAndItemId(memberId, itemId).ifPresent(cart -> {
+            cart.setQuantity(quantity);
+            cartRepository.save(cart);
+        });
+    }
 }
