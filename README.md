@@ -20,22 +20,22 @@
 
 ```
 shop_musinsa/
-├── backend/                        # Spring Boot 백엔드
-│   ├── src/main/java/com/ventalize/shop/
-│   │   ├── config/                 # Security, CORS, AdminInitializer
-│   │   ├── controller/             # REST API 컨트롤러 (일반 + 관리자)
-│   │   ├── dto/                    # 요청·응답 DTO
-│   │   │   ├── cart/               # CartRequest(qty), CartItemResponse
-│   │   │   ├── order/              # OrderRequest(quantities), OrderItemDetail
-│   │   │   └── item/
-│   │   ├── entity/                 # JPA 엔티티
-│   │   ├── repository/             # Spring Data JPA Repository
-│   │   ├── service/                # 비즈니스 로직 (재고 차감, 주문 상세 등)
-│   │   └── filter/                 # 세션 필터
-│   ├── src/main/resources/
-│   │   └── application.yml         # DB·포트 설정
-│   ├── ventalize_ddl.sql           # 테이블 DDL + 더미 데이터 (카테고리 6종)
-│   └── 실행가이드.md
+├── backend/                        # Spring Boot 백엔드 루트
+│   └── shop/                       # 실제 Gradle 프로젝트
+│       ├── src/main/java/com/ventalize/shop/
+│       │   ├── config/             # Security, CORS, AdminInitializer
+│       │   ├── controller/         # REST API 컨트롤러 (일반 + 관리자)
+│       │   ├── dto/                # 요청·응답 DTO
+│       │   │   ├── cart/           # CartRequest(qty), CartItemResponse
+│       │   │   ├── order/          # OrderRequest(quantities), OrderItemDetail
+│       │   │   └── item/
+│       │   ├── entity/             # JPA 엔티티
+│       │   ├── repository/         # Spring Data JPA Repository
+│       │   ├── service/            # 비즈니스 로직 (재고 차감, 주문 상세 등)
+│       │   └── filter/             # 세션 필터
+│       ├── src/main/resources/
+│       │   └── application.yml     # DB·포트 설정
+│       └── build.gradle
 │
 ├── frontend/                       # Vue.js 프론트엔드
 │   ├── src/
@@ -53,6 +53,8 @@ shop_musinsa/
 │   ├── package.json
 │   └── vite.config.js
 │
+├── ventalize_ddl.sql               # 테이블 DDL + 더미 데이터 (카테고리 6종)
+├── 실행가이드.md
 └── README.md
 ```
 
@@ -71,18 +73,18 @@ ALTER USER postgres PASSWORD '1004';
 
 ```bash
 # DDL 및 더미 데이터 초기화 (최초 1회)
-psql -U postgres -d shop -f backend/ventalize_ddl.sql
+psql -U postgres -d shop -f ventalize_ddl.sql
 ```
 
 ### 2. 백엔드 실행
 
 ```bash
-cd backend
+cd backend/shop
 ./gradlew bootRun
 ```
 
 - 포트: **8080**
-- `backend/src/main/resources/application.yml`에서 DB 비밀번호 확인
+- `backend/shop/src/main/resources/application.yml`에서 DB 비밀번호 확인
 - 최초 실행 시 `AdminInitializer`가 자동으로 관리자 계정 생성
 
 ### 3. 프론트엔드 실행
