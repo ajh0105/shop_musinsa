@@ -2,6 +2,7 @@ package com.ventalize.shop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class OrderItem {
     private Integer itemId;
 
     @Column(nullable = false)
+    @ColumnDefault("1")
     private Integer quantity = 1;
 
     @Column(nullable = false, updatable = false)
