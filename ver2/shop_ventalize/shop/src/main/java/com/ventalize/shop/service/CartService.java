@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -51,8 +52,15 @@ public class CartService{
     // 수량 1 증가
     @Transactional
     public void incrementQty(Integer memberId, Integer itemId) {
+        addQty(memberId, itemId, 1);
+    }
+
+    // 수량 N 추가
+    @Transactional
+    public void addQty(Integer memberId, Integer itemId, int amount) {
         cartRepository.findByMemberIdAndItemId(memberId, itemId).ifPresent(cart -> {
-            cart.incrementQuantity();
+            int current = Objects.requireNonNullElse(cart.getQuantity(), 1);
+            cart.setQuantity(current + amount);
             cartRepository.save(cart);
         });
     }

@@ -4,6 +4,7 @@ import com.ventalize.shop.repository.MemberRepository;
 import com.ventalize.shop.dto.order.OrderRead;
 import com.ventalize.shop.entity.Order;
 import com.ventalize.shop.repository.OrderRepository;
+import com.ventalize.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,9 @@ public class AdminOrderController {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
+    private final OrderService orderService;
 
-    /** 전체 주문 목록 */
+    /** 전체 주문 목록 (아이템 상세 포함) */
     @GetMapping
     public ResponseEntity<?> list(@RequestParam(required = false) String status) {
         List<Order> orders = orderRepository.findAllByOrderByCreatedAtDesc();
@@ -57,7 +59,7 @@ public class AdminOrderController {
     private OrderRead toRead(Order o) {
         String memberName = memberRepository.findById(o.getMemberId())
                 .map(m -> m.getName()).orElse("(탈퇴회원)");
-        return OrderRead.builder()
+        OrderRead read = OrderRead.builder()
                 .id(o.getId())
                 .memberId(o.getMemberId())
                 .memberName(memberName)
@@ -69,5 +71,7 @@ public class AdminOrderController {
                 .statusLabel(o.getStatusLabel())
                 .createdAt(o.getCreatedAt())
                 .build();
+        read.setItems(orderService.buildDetails(o.getId()));
+        return read;
     }
 }

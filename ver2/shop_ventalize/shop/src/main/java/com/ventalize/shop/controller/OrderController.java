@@ -41,8 +41,15 @@ public class OrderController {
     public ResponseEntity<?> add(@RequestBody OrderRequest orderReq) {
         Integer memberId = securityUtil.getCurrentMemberId();
         if (memberId == null) return ResponseEntity.status(401).build();
-        orderService.order(orderReq, memberId);
-        return ResponseEntity.ok().build();
+        try {
+            orderService.order(orderReq, memberId);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            // 재고 부족
+            return ResponseEntity.status(409).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     /** 주문 취소 */

@@ -1,6 +1,5 @@
 package com.ventalize.shop.dto.order;
 
-import com.ventalize.shop.dto.item.ItemRead;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,5 +21,5 @@ public class OrderRead {
     private String status;
     private String statusLabel;
     private LocalDateTime createdAt;
-    private List<ItemRead> items;
+    private List<OrderItemDetail> items;
 }

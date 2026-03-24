@@ -233,7 +233,7 @@ const qnaForm    = ref({ title: '', content: '', isSecret: false })
 
 const categoryLabels = {
   SCARVES: 'Scarves', READY_TO_WEAR: 'Ready to Wear',
-  PERFUME: 'Perfume', ACC: 'Accessories', BAG: 'Bags', SALE: 'Sale',
+  PERFUME: 'Perfume', ACC: 'Accessories', BAG: 'Bags', SHOES: 'Shoes',
 }
 const categoryLabel = computed(() => categoryLabels[item.value?.category] || item.value?.category || '')
 
@@ -273,10 +273,9 @@ async function addToCart() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ itemId: item.value.id })
+    body: JSON.stringify({ itemId: item.value.id, qty: qty.value })
   })
-  if (res.ok) showToast('Added to your bag.')
-  else if (res.status === 409) showToast('Already in your bag.')
+  if (res.ok) showToast(`${qty.value}개를 장바구니에 담았습니다.`)
   else showToast('An error occurred.')
 }
 

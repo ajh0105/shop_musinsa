@@ -35,7 +35,7 @@ CREATE TABLE members (
 );
 
 -- ============================================================
--- 3. 상품 테이블 (카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAG, SALE)
+-- 3. 상품 테이블 (카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAG, SHOES)
 -- ============================================================
 CREATE TABLE items (
     id           SERIAL PRIMARY KEY,
@@ -55,9 +55,11 @@ CREATE TABLE items (
 -- 4. 장바구니
 -- ============================================================
 CREATE TABLE carts (
-    id        SERIAL PRIMARY KEY,
-    member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE,
-    item_id   INTEGER NOT NULL REFERENCES items(id)   ON DELETE CASCADE,
+    id         SERIAL    PRIMARY KEY,
+    member_id  INTEGER   NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    item_id    INTEGER   NOT NULL REFERENCES items(id)   ON DELETE CASCADE,
+    quantity   INTEGER   NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(member_id, item_id)
 );
 
@@ -80,9 +82,11 @@ CREATE TABLE orders (
 -- 6. 주문 상품
 -- ============================================================
 CREATE TABLE order_items (
-    id       SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    item_id  INTEGER NOT NULL REFERENCES items(id)
+    id         SERIAL    PRIMARY KEY,
+    order_id   INTEGER   NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    item_id    INTEGER   NOT NULL REFERENCES items(id),
+    quantity   INTEGER   NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- ============================================================
@@ -257,24 +261,24 @@ INSERT INTO items (brand, name, category, img_path, description, price, discount
 ('Ventalize', '벨팅 숄더백 클래식',          'BAG', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '클래식한 벨팅 디테일의 레더 숄더백.', 445000, 0, 10),
 ('Ventalize', '나일론 크로스백 나이트',       'BAG', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '가볍고 실용적인 나일론 크로스백.', 148000, 20, 30);
 
--- ── SALE (세일) ─────────────────────────────────────────
+-- ── SHOES (슈즈) ─────────────────────────────────────────
 INSERT INTO items (brand, name, category, img_path, description, price, discount_per, stock_count) VALUES
-('Ventalize', '[SALE] 실크 스카프 클래식',         'SALE', 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600', '시즌 오프 특가! 정통 실크 스카프.', 128000, 40, 20),
-('Ventalize', '[SALE] 울 머플러 와인',             'SALE', 'https://images.unsplash.com/photo-1520903374185-9a4d5a1d13bf?w=600', '시즌 오프 특가! 와인 컬러 울 머플러.', 89000, 35, 15),
-('Ventalize', '[SALE] 실크 블라우스 핑크',         'SALE', 'https://images.unsplash.com/photo-1594938298603-c8148c4b4cde?w=600', '시즌 오프 특가! 핑크 실크 블라우스.', 185000, 45, 10),
-('Ventalize', '[SALE] 오드뚜왈렛 100ml',           'SALE', 'https://images.unsplash.com/photo-1512411600720-d26919c6a9da?w=600', '시즌 오프 특가! 지난 시즌 인기 향수.', 145000, 30, 25),
-('Ventalize', '[SALE] 레더 미니 크로스백',         'SALE', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '시즌 오프 특가! 레더 미니 크로스백.', 298000, 40, 8),
-('Ventalize', '[SALE] 골드 체인 목걸이',           'SALE', 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600', '시즌 오프 특가! 골드 체인 목걸이.', 125000, 50, 30),
-('Ventalize', '[SALE] 플리츠 스커트 그린',         'SALE', 'https://images.unsplash.com/photo-1583496661160-fb5218a4e42e?w=600', '시즌 오프 특가! 그린 컬러 플리츠 스커트.', 145000, 35, 18),
-('Ventalize', '[SALE] 앰버 오리엔탈 EDP 30ml',    'SALE', 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600', '시즌 오프 특가! 인기 향수 소용량.', 225000, 40, 20),
-('Ventalize', '[SALE] 퀼팅 숄더백 베이지',         'SALE', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '시즌 오프 특가! 베이지 퀼팅 숄더백.', 425000, 30, 5),
-('Ventalize', '[SALE] 실버 진주 이어링',           'SALE', 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600', '시즌 오프 특가! 담수 진주 이어링.', 148000, 45, 22),
-('Ventalize', '[SALE] 린넨 와이드 팬츠',           'SALE', 'https://images.unsplash.com/photo-1594938374182-a55a4e4d96c5?w=600', '시즌 오프 특가! 린넨 소재 와이드 팬츠.', 168000, 40, 15),
-('Ventalize', '[SALE] 로즈 퍼퓸 크림',            'SALE', 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600', '시즌 오프 특가! 장미향 퍼퓸 크림.', 88000, 30, 35),
-('Ventalize', '[SALE] 레더 토트백 버건디',         'SALE', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '시즌 오프 특가! 버건디 레더 토트백.', 585000, 35, 6),
-('Ventalize', '[SALE] 크리스탈 스터드 이어링',     'SALE', 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600', '시즌 오프 특가! 크리스탈 스터드.', 68000, 40, 40),
-('Ventalize', '[SALE] 캐시미어 터틀넥 그레이',     'SALE', 'https://images.unsplash.com/photo-1561730916-c49d5e7e4ed5?w=600', '시즌 오프 특가! 그레이 캐시미어 터틀넥.', 385000, 50, 10),
-('Ventalize', '[SALE] 스웨이드 미니 버킷백',       'SALE', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '시즌 오프 특가! 스웨이드 버킷백.', 365000, 45, 8);
+('Ventalize', '클래식 레더 스틸레토 블랙',      'SHOES', 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600', '이탈리안 풀그레인 레더 소재의 10cm 스틸레토 힐. 포멀한 자리에 완벽한 선택.', 358000, 0, 20),
+('Ventalize', '스웨이드 앵클 부츠 카멜',        'SHOES', 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600', '부드러운 카멜 컬러 스웨이드 앵클 부츠. 가을·겨울 데일리 필수템.', 298000, 10, 25),
+('Ventalize', '메탈릭 키튼 힐 실버',           'SHOES', 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600', '은은한 광택의 실버 메탈릭 키튼 힐. 우아하고 편안한 굽 높이.', 228000, 0, 18),
+('Ventalize', '크리스탈 스트랩 뮬 누드',        'SHOES', 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600', '크리스탈 장식 스트랩의 섬세한 누드 뮬. 파티와 데일리 모두 어울림.', 285000, 0, 15),
+('Ventalize', '클래식 레더 로퍼 버건디',        'SHOES', 'https://images.unsplash.com/photo-1529810313688-44ea1c2d81d3?w=600', '버건디 컬러 레더 로퍼. 캐주얼과 포멀을 넘나드는 클래식한 디자인.', 248000, 5, 30),
+('Ventalize', '스트랩 힐 샌들 골드',           'SHOES', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600', '멀티 스트랩 디자인의 골드 힐 샌들. 7cm 굽으로 여름 파티룩에 완벽.', 265000, 0, 22),
+('Ventalize', '벨벳 발레 플랫 버건디',          'SHOES', 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600', '부드러운 버건디 벨벳 소재의 발레 플랫. 시즌리스 아이템.', 185000, 0, 35),
+('Ventalize', '플랫폼 슬링백 베이지',           'SHOES', 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600', '5cm 플랫폼 솔의 베이지 슬링백. 키가 커 보이는 효과와 편안함을 동시에.', 318000, 10, 12),
+('Ventalize', '레더 옥스퍼드 화이트',           'SHOES', 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=600', '클린한 화이트 레더 옥스퍼드 슈즈. 감각적인 페미닌 무드.', 268000, 0, 20),
+('Ventalize', '애니멀 프린트 뮬 레오파드',      'SHOES', 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600', '트렌디한 레오파드 패턴의 포인티드 토 뮬. 시즌 컬렉션 핫아이템.', 235000, 15, 18),
+('Ventalize', '오버니 레더 부츠 블랙',          'SHOES', 'https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?w=600', '무릎 위까지 오는 블랙 레더 오버니 부츠. 세련된 실루엣과 높은 활용도.', 545000, 0, 8),
+('Ventalize', '쿠션 메쉬 스니커즈 화이트',      'SHOES', 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600', '통기성 좋은 메쉬 어퍼와 두툼한 쿠션 솔. 하루 종일 편안한 스니커즈.', 198000, 0, 45),
+('Ventalize', '웨지 에스파드리유 네추럴',        'SHOES', 'https://images.unsplash.com/photo-1531310197839-ccf54634509e?w=600', '에스파드리유 웨지 솔의 캐주얼 슈즈. 여름 리조트룩에 최적.', 175000, 0, 28),
+('Ventalize', '토캡 더비 슈즈 네이비',          'SHOES', 'https://images.unsplash.com/photo-1565381543286-8614ae7e5e51?w=600', '클래식 토캡 디테일의 네이비 레더 더비. 비즈니스 캐주얼에 완벽.', 315000, 0, 15),
+('Ventalize', '레이스업 첼시 부츠 브라운',      'SHOES', 'https://images.unsplash.com/photo-1515347619252-60a4bf4fff4f?w=600', '레이스업 디테일이 가미된 브라운 첼시 부츠. 클래식과 모던의 조화.', 395000, 5, 10),
+('Ventalize', '새틴 이브닝 슬리퍼 블랙',        'SHOES', 'https://images.unsplash.com/photo-1536891399564-5d0fc2734b8a?w=600', '광택 새틴 소재의 플랫 이브닝 슬리퍼. 특별한 자리를 위한 우아한 선택.', 245000, 0, 20);
 
 -- ============================================================
 -- 13. 쿠폰 테이블

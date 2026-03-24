@@ -54,10 +54,11 @@ public class CartController {
         if (memberId == null) return ResponseEntity.status(401).build();
 
         CartRead existing = cartService.find(memberId, cartReq.getItemId());
+        int reqQty = (cartReq.getQty() != null && cartReq.getQty() > 0) ? cartReq.getQty() : 1;
         if (existing == null) {
             cartService.save(cartReq.toEntity(memberId));
         } else {
-            cartService.incrementQty(memberId, cartReq.getItemId());
+            cartService.addQty(memberId, cartReq.getItemId(), reqQty);
         }
         return ResponseEntity.ok().build();
     }

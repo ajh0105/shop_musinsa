@@ -41,6 +41,12 @@ public class Cart {
         this.quantity = 1;
     }
 
+    public Cart(Integer memberId, Integer itemId, Integer qty) {
+        this.memberId = memberId;
+        this.itemId = itemId;
+        this.quantity = (qty != null && qty > 0) ? qty : 1;
+    }
+
     public void incrementQuantity() {
         this.quantity = Objects.requireNonNullElse(this.quantity, 1) + 1;
     }

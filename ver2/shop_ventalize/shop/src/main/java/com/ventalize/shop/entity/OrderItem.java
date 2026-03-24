@@ -21,6 +21,9 @@ public class OrderItem {
     @Column(nullable = false)
     private Integer itemId;
 
+    @Column(nullable = false)
+    private Integer quantity = 1;
+
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -31,5 +34,12 @@ public class OrderItem {
     public OrderItem(Integer orderId, Integer itemId) {
         this.orderId = orderId;
         this.itemId = itemId;
+        this.quantity = 1;
+    }
+
+    public OrderItem(Integer orderId, Integer itemId, Integer quantity) {
+        this.orderId = orderId;
+        this.itemId = itemId;
+        this.quantity = (quantity != null && quantity > 0) ? quantity : 1;
     }
 }
