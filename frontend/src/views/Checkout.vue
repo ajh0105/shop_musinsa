@@ -151,9 +151,14 @@ const totalPrice = computed(() => {
 })
 
 function formatCardNumber(e) {
-  const digits = e.target.value.replace(/\D/g, '').slice(0, 16)
+  const raw = e.target.value
+  if (/[^\d\-]/.test(raw)) {
+    cardNumberError.value = '숫자를 입력해주세요.'
+  } else {
+    cardNumberError.value = ''
+  }
+  const digits = raw.replace(/\D/g, '').slice(0, 16)
   form.value.cardNumber = digits.replace(/(.{4})/g, '$1-').replace(/-$/, '')
-  cardNumberError.value = ''
 }
 
 function applyCouponFromList() {
