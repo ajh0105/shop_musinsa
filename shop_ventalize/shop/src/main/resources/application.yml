@@ -1,12 +1,12 @@
 server:
-  port: 8085
+  port: 8102
 
 spring:
   application:
     name: ventalize
   datasource:
-    url: jdbc:postgresql://localhost:5432/ventalize
-    username: postgres
+    url: jdbc:postgresql://localhost:5433/ventalize
+    username: pgadmin
     password: 1004
     driver-class-name: org.postgresql.Driver
     hikari:

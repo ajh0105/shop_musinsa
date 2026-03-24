@@ -56,7 +56,6 @@
             </button>
           </div>
           <div class="v-product-card__info">
-            <p class="v-product-card__brand">{{ item.brand }}</p>
             <p class="v-product-card__name">{{ item.name }}</p>
             <div class="v-product-card__price">
               <span v-if="item.discountPer > 0" class="v-product-card__price-original">{{ fmt(item.price) }}</span>

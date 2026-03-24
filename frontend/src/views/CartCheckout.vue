@@ -20,7 +20,6 @@
           <div v-for="it in items" :key="it.id" class="checkout-item">
             <img :src="it.imgPath" :alt="it.name" class="checkout-item-img" />
             <div class="checkout-item-info">
-              <p class="checkout-item-brand">{{ it.brand }}</p>
               <p class="checkout-item-name">{{ it.name }}</p>
               <div class="checkout-item-price-row">
                 <span v-if="it.discountPer > 0" class="price-original">{{ it.price?.toLocaleString() }}원</span>
