@@ -71,8 +71,8 @@
                 <option value="KAKAO">카카오페이</option>
                 <option value="NAVER">네이버페이</option>
                 <option value="TOSS">토스페이</option>
-                <option value="BANK_TRANSFER">무통장 입금</option>
-                <option value="WIRE_TRANSFER">실시간 계좌이체</option>
+                <option value="BANK">무통장 입금</option>
+                <option value="WIRE">실시간 계좌이체</option>
               </select>
             </div>
             <div v-if="form.payment === 'CARD'" class="form-group">
@@ -80,7 +80,7 @@
               <input v-model="form.cardNumber" type="text" class="form-input" placeholder="0000-0000-0000-0000" maxlength="19" @input="formatCardNumber" />
               <p v-if="cardNumberError" class="form-error" style="margin-top:4px">{{ cardNumberError }}</p>
             </div>
-            <div v-if="form.payment === 'BANK_TRANSFER'" class="form-group">
+            <div v-if="form.payment === 'BANK'" class="form-group">
               <label class="form-label">가상 계좌 안내</label>
               <div class="virtual-account-box">
                 <p class="virtual-account-bank">국민은행</p>
