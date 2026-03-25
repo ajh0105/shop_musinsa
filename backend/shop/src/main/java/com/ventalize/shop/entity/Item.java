@@ -21,10 +21,6 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 50)
-    @Builder.Default
-    private String brand = "Ventalize";
-
     @Column(nullable = false, length = 100)
     private String name;
 
