@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ItemRead {
     private final Integer id;
-    private final String brand;
     private final String name;
     private final String category;
     private final String imgPath;

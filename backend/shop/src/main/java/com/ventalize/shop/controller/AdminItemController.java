@@ -38,7 +38,6 @@ public class AdminItemController {
                 : "/images/default.png";
 
         Item item = Item.builder()
-                .brand(req.getBrand())
                 .name(req.getName())
                 .category(req.getCategory())
                 .description(req.getDescription())
@@ -58,7 +57,6 @@ public class AdminItemController {
             @PathVariable Integer id,
             @RequestBody ItemCreateRequest req) {
         return itemRepository.findById(id).map(item -> {
-            if (StringUtils.hasLength(req.getBrand()))       item.setBrand(req.getBrand());
             if (StringUtils.hasLength(req.getName()))        item.setName(req.getName());
             if (StringUtils.hasLength(req.getCategory()))    item.setCategory(req.getCategory());
             if (StringUtils.hasLength(req.getDescription())) item.setDescription(req.getDescription());
