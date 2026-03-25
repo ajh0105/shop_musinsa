@@ -15,11 +15,11 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     List<Item> findByNameContainingOrderByIdAsc(String name);
 
-    List<Item> findTop4ByOrderByCreatedAtDesc();
+    List<Item> findTop5ByOrderByCreatedAtDesc();
 
-    List<Item> findTop4ByOrderByViewCountDesc();
+    List<Item> findTop5ByOrderByViewCountDesc();
 
-    List<Item> findTop4ByDiscountPerGreaterThanOrderByDiscountPerDesc(int discountPer);
+    List<Item> findTop5ByDiscountPerGreaterThanOrderByDiscountPerDesc(int discountPer);
 
     List<Item> findByCategoryAndIdNotOrderByIdAsc(String category, Integer id);
 

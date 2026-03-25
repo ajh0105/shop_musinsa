@@ -35,15 +35,15 @@ public class ItemService {
     }
 
     public List<ItemRead> findNew() {
-        return itemRepository.findTop4ByOrderByCreatedAtDesc().stream().map(Item::toRead).toList();
+        return itemRepository.findTop5ByOrderByCreatedAtDesc().stream().map(Item::toRead).toList();
     }
 
     public List<ItemRead> findBest() {
-        return itemRepository.findTop4ByOrderByViewCountDesc().stream().map(Item::toRead).toList();
+        return itemRepository.findTop5ByOrderByViewCountDesc().stream().map(Item::toRead).toList();
     }
 
     public List<ItemRead> findRecommend() {
-        return itemRepository.findTop4ByDiscountPerGreaterThanOrderByDiscountPerDesc(0)
+        return itemRepository.findTop5ByDiscountPerGreaterThanOrderByDiscountPerDesc(0)
                 .stream().map(Item::toRead).toList();
     }
 
