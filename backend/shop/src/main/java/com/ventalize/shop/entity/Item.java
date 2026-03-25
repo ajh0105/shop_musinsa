@@ -21,6 +21,9 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false, length = 50)
+    private String brand;
+
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -55,6 +58,7 @@ public class Item {
     public ItemRead toRead() {
         return ItemRead.builder()
                 .id(id)
+                .brand(brand)
                 .name(name)
                 .category(category)
                 .imgPath(normalizeImgPath(imgPath))

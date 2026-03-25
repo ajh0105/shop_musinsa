@@ -13,7 +13,7 @@
       <table v-else class="admin-table">
         <thead>
           <tr>
-            <th>ID</th><th>이미지</th><th>상품명</th><th>카테고리</th>
+            <th>ID</th><th>이미지</th><th>브랜드</th><th>상품명</th><th>카테고리</th>
             <th>가격</th><th>할인</th><th>재고</th><th>관리</th>
           </tr>
         </thead>
@@ -21,6 +21,7 @@
           <tr v-for="p in products" :key="p.id">
             <td>#{{ p.id }}</td>
             <td><img :src="p.imgPath" class="product-thumb" /></td>
+            <td>{{ p.brand }}</td>
             <td style="font-weight:600">{{ p.name }}</td>
             <td><span class="grade-badge grade-sapphire">{{ p.category }}</span></td>
             <td>{{ p.price?.toLocaleString() }}원</td>
@@ -37,7 +38,7 @@
             </td>
           </tr>
           <tr v-if="products.length === 0">
-            <td colspan="8" style="text-align:center;color:#9CA3AF;padding:40px">등록된 상품이 없습니다.</td>
+            <td colspan="9" style="text-align:center;color:#9CA3AF;padding:40px">등록된 상품이 없습니다.</td>
           </tr>
         </tbody>
       </table>
@@ -48,11 +49,17 @@
       <div class="admin-modal" style="max-width:600px">
         <h3 class="admin-modal-title">{{ editTarget ? '상품 수정' : '상품 등록' }}</h3>
         <form @submit.prevent="submitProduct">
-          <div class="admin-form-group">
-            <label class="admin-form-label">카테고리</label>
-            <select v-model="form.category" class="admin-form-select" required>
-              <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
-            </select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="admin-form-group">
+              <label class="admin-form-label">브랜드</label>
+              <input v-model="form.brand" class="admin-form-input" required />
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">카테고리</label>
+              <select v-model="form.category" class="admin-form-select" required>
+                <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+              </select>
+            </div>
           </div>
           <div class="admin-form-group">
             <label class="admin-form-label">상품명</label>
@@ -77,9 +84,13 @@
             </div>
           </div>
           <div class="admin-form-group">
-            <label class="admin-form-label">이미지</label>
-            <input type="file" accept="image/*" @change="onImageChange" class="admin-form-input" />
-            <img v-if="imagePreview" :src="imagePreview" style="width:80px;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;border:1px solid #E5E7EB" />
+            <label class="admin-form-label">이미지 선택 (public/images/)</label>
+            <select v-model="form.imgPath" class="admin-form-select">
+              <option value="">이미지를 선택하세요</option>
+              <option v-for="img in imageList" :key="img" :value="'/images/' + img">{{ img }}</option>
+            </select>
+            <img v-if="form.imgPath" :src="form.imgPath"
+              style="width:80px;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;border:1px solid #E5E7EB" />
           </div>
           <div class="admin-modal-actions">
             <button type="button" class="admin-btn admin-btn--ghost" @click="showModal = false">취소</button>
@@ -101,12 +112,17 @@ const keyword = ref('')
 const loading = ref(false)
 const showModal = ref(false)
 const editTarget = ref(null)
-const imageFile = ref(null)
-const imagePreview = ref(null)
 const toast = ref('')
 
 const categories = ['OUTER', 'TOP', 'PANTS', 'SHOES', 'BAG', 'ACC', 'SCARVES', 'READY_TO_WEAR', 'PERFUME', 'SALE']
-const form = ref({ name: '', category: 'TOP', description: '', price: 0, discountPer: 0, stockCount: 0 })
+const imageList = [
+  'img1.jpg', 'img2.jpg', 'img3.jpg',
+  'new_pro01.png', 'new_pro02.png', 'new_pro03.png', 'new_pro04.png',
+  'pro01.png', 'pro02.png', 'pro03.png', 'pro04.png',
+  'recom_pro01.png', 'recom_pro02.png', 'recom_pro03.png', 'recom_pro04.png'
+]
+
+const form = ref({ brand: '', name: '', category: 'TOP', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' })
 
 function showToast(msg) {
   toast.value = msg
@@ -126,32 +142,34 @@ async function loadProducts() {
 
 function openAddModal() {
   editTarget.value = null
-  form.value = { name: '', category: 'TOP', description: '', price: 0, discountPer: 0, stockCount: 0 }
-  imageFile.value = null
-  imagePreview.value = null
+  form.value = { brand: '', name: '', category: 'TOP', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' }
   showModal.value = true
 }
 
 function openEditModal(p) {
   editTarget.value = p
-  form.value = { name: p.name, category: p.category, description: p.description || '', price: p.price, discountPer: p.discountPer, stockCount: p.stockCount }
-  imageFile.value = null
-  imagePreview.value = p.imgPath
+  form.value = {
+    brand: p.brand || '',
+    name: p.name,
+    category: p.category,
+    description: p.description || '',
+    price: p.price,
+    discountPer: p.discountPer,
+    stockCount: p.stockCount,
+    imgPath: p.imgPath || ''
+  }
   showModal.value = true
 }
 
-function onImageChange(e) {
-  imageFile.value = e.target.files[0]
-  if (imageFile.value) imagePreview.value = URL.createObjectURL(imageFile.value)
-}
-
 async function submitProduct() {
-  const fd = new FormData()
-  fd.append('data', new Blob([JSON.stringify(form.value)], { type: 'application/json' }))
-  if (imageFile.value) fd.append('image', imageFile.value)
   const url = editTarget.value ? `/v1/api/admin/items/${editTarget.value.id}` : '/v1/api/admin/items'
   const method = editTarget.value ? 'PUT' : 'POST'
-  const res = await fetch(url, { method, body: fd, credentials: 'include' })
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(form.value)
+  })
   if (res.ok) { showModal.value = false; loadProducts(); showToast(editTarget.value ? '수정되었습니다.' : '등록되었습니다.') }
   else showToast('처리 중 오류가 발생했습니다.')
 }
