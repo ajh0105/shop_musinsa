@@ -103,11 +103,12 @@
 
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 
 const { isLoggedIn, loginId, userName, grade, isAdmin, clearLogin } = useAuth()
 const router = useRouter()
+const route  = useRoute()
 
 const searchOpen  = ref(false)
 const searchQuery = ref('')
@@ -121,12 +122,15 @@ async function fetchCartCount() {
     const r = await fetch('/v1/api/cart/items', { credentials: 'include' })
     if (r.ok) {
       const items = await r.json()
-      cartCount.value = Array.isArray(items) ? items.length : 0
+      cartCount.value = Array.isArray(items) ? items.filter(i => i.quantity > 0).length : 0
+    } else {
+      cartCount.value = 0
     }
   } catch { cartCount.value = 0 }
 }
 
 watch(isLoggedIn, fetchCartCount, { immediate: true })
+watch(() => route.fullPath, fetchCartCount)
 
 // 등급 아이콘 계산
 const GRADE_MAP = {

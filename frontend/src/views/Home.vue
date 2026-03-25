@@ -280,19 +280,19 @@ const fmt = (p) => p ? p.toLocaleString('ko-KR') + '원' : ''
 
 async function fetchNew() {
   try {
-    const r = await fetch('/v1/api/items?sort=NEW&size=5', { credentials: 'include' })
+    const r = await fetch('/v1/api/items?sort=new', { credentials: 'include' })
     newItems.value = (await r.json()).slice(0, 5)
   } finally { newLoading.value = false }
 }
 async function fetchBest() {
   try {
-    const r = await fetch('/v1/api/items?sort=BEST&size=5', { credentials: 'include' })
+    const r = await fetch('/v1/api/items?sort=best', { credentials: 'include' })
     bestItems.value = (await r.json()).slice(0, 5)
   } finally { bestLoading.value = false }
 }
 async function fetchRec() {
   try {
-    const r = await fetch('/v1/api/items?sort=REC&size=4', { credentials: 'include' })
+    const r = await fetch('/v1/api/items?sort=recommend', { credentials: 'include' })
     recItems.value = (await r.json()).slice(0, 4)
   } finally { recLoading.value = false }
 }
