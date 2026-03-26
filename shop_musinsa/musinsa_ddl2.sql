@@ -110,3 +110,8 @@ CROSS JOIN items i
 WHERE m.login_id = 'user1@test.com'
   AND i.id <= 8
 ON CONFLICT DO NOTHING;
+
+-- ⑨ faqs 테이블 sort_order 컬럼 보정
+--    (Hibernate ddl-auto:update 가 NOT NULL 컬럼을 DEFAULT 없이 추가해 오류 발생 시 아래 실행)
+ALTER TABLE faqs ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0;
+UPDATE faqs SET sort_order = 0 WHERE sort_order IS NULL;

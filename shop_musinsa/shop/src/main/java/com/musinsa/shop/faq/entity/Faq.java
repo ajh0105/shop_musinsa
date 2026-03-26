@@ -29,7 +29,7 @@ public class Faq {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String answer;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INTEGER NOT NULL DEFAULT 0")
     @Builder.Default
     private Integer sortOrder = 0;
 
