@@ -356,7 +356,7 @@ watch(() => route.params.id, (id) => { if (id) { item.value = null; loadItem(id)
 /* Media */
 .v-pd-img-wrap {
   position: relative;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 1 / 1;
   background: #F5F0E8;
   overflow: hidden;
 }
