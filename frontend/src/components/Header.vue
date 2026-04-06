@@ -106,7 +106,7 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 
-const { isLoggedIn, loginId, userName, grade, isAdmin, clearLogin } = useAuth()
+const { isLoggedIn, loginId, userName, grade, isAdmin, clearLogin, checkLoginStatus } = useAuth()
 const router = useRouter()
 const route  = useRoute()
 
@@ -130,7 +130,7 @@ async function fetchCartCount() {
   } catch { cartCount.value = 0 }
 }
 
-watch(isLoggedIn, fetchCartCount, { immediate: true })
+watch(isLoggedIn, fetchCartCount)
 watch(() => route.fullPath, fetchCartCount)
 
 // 등급 아이콘 계산
@@ -192,7 +192,11 @@ const categories = [
 ]
 
 function onScroll() { scrolled.value = window.scrollY > 40 }
-onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onMounted(async () => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  await checkLoginStatus()
+  fetchCartCount()
+})
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
