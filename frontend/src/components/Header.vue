@@ -124,6 +124,7 @@ async function fetchCartCount() {
       const items = await r.json()
       cartCount.value = Array.isArray(items) ? items.filter(i => i.quantity > 0).length : 0
     } else {
+      if (r.status === 401) clearLogin()
       cartCount.value = 0
     }
   } catch { cartCount.value = 0 }

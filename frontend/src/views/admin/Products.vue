@@ -122,7 +122,7 @@ const toast      = ref('')
 const uploading  = ref(false)
 const fileInput  = ref(null)
 
-const categories = ['OUTER', 'TOP', 'PANTS', 'SHOES', 'BAG', 'ACC', 'SCARVES', 'READY_TO_WEAR', 'PERFUME', 'SALE']
+const categories = ['SCARVES', 'READY_TO_WEAR', 'PERFUME', 'ACC', 'BAG', 'SALE']
 const imageList = [
   'img1.jpg', 'img2.jpg', 'img3.jpg',
   'new_pro01.png', 'new_pro02.png', 'new_pro03.png', 'new_pro04.png',
@@ -130,7 +130,7 @@ const imageList = [
   'recom_pro01.png', 'recom_pro02.png', 'recom_pro03.png', 'recom_pro04.png'
 ]
 
-const form = ref({ name: '', category: 'TOP', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' })
+const form = ref({ name: '', category: 'SCARVES', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' })
 
 async function handleFileUpload(e) {
   const file = e.target.files?.[0]
@@ -177,7 +177,7 @@ async function loadProducts() {
 
 function openAddModal() {
   editTarget.value = null
-  form.value = { name: '', category: 'TOP', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' }
+  form.value = { name: '', category: 'SCARVES', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' }
   showModal.value = true
 }
 
