@@ -47,8 +47,16 @@
     </div>
 
     <div class="pager">
-      <button :disabled="currentPage <= 1" @click="currentPage -= 1">이전</button>
-      <button :disabled="currentPage >= totalPages" @click="currentPage += 1">다음</button>
+      <button class="pager-arrow" :disabled="currentPage <= 1" @click="currentPage = 1" title="첫 페이지">«</button>
+      <button class="pager-arrow" :disabled="currentPage <= 1" @click="currentPage -= 1" title="이전">‹</button>
+
+      <template v-for="p in pageNumbers" :key="p">
+        <span v-if="p === '...'" class="pager-ellipsis">…</span>
+        <button v-else class="pager-num" :class="{ active: p === currentPage }" @click="currentPage = p">{{ p }}</button>
+      </template>
+
+      <button class="pager-arrow" :disabled="currentPage >= totalPages" @click="currentPage += 1" title="다음">›</button>
+      <button class="pager-arrow" :disabled="currentPage >= totalPages" @click="currentPage = totalPages" title="마지막 페이지">»</button>
     </div>
 
     <Transition name="toast">
@@ -88,6 +96,24 @@ const totalPages = computed(() => Math.max(1, Math.ceil(items.value.length / pag
 const pagedItems = computed(() => {
   const start = (currentPage.value - 1) * pageSize
   return items.value.slice(start, start + pageSize)
+})
+
+// 현재 페이지 주변 ±2 + 첫/끝 페이지 + 생략 부호
+const pageNumbers = computed(() => {
+  const total = totalPages.value
+  const cur = currentPage.value
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+
+  const pages = new Set([1, total, cur])
+  for (let i = Math.max(2, cur - 2); i <= Math.min(total - 1, cur + 2); i++) pages.add(i)
+
+  const sorted = [...pages].sort((a, b) => a - b)
+  const result = []
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) result.push('...')
+    result.push(sorted[i])
+  }
+  return result
 })
 
 async function loadCategory() {
