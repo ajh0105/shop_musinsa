@@ -113,7 +113,7 @@ const categoryLabels = {
   PERFUME:       'Perfume',
   ACC:           'Accessories',
   BAG:           'Bags',
-  SHOES:         'Shoes',
+  SALE:          'Sale',
   ALL:           'All Collections',
 }
 
@@ -122,7 +122,6 @@ const sortOptions = [
   { value: 'new',      label: 'New In' },
   { value: 'low',      label: 'Price ↓' },
   { value: 'high',     label: 'Price ↑' },
-  { value: 'discount', label: 'Sale' },
 ]
 
 const categoryLabel = computed(() => {

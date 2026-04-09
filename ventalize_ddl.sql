@@ -324,6 +324,97 @@ INSERT INTO faqs (category, question, answer) VALUES
 ('기타', '재입고 알림을 받을 수 있나요?', '현재 재입고 알림 서비스는 준비 중입니다. 1:1 문의를 남겨주시면 재입고 시 연락드리겠습니다.');
 
 -- ============================================================
+-- 15. 리뷰 샘플 데이터
+-- ============================================================
+DO $$
+DECLARE
+  v_member_ids INTEGER[];
+  v_item_ids   INTEGER[];
+  v_contents   TEXT[] := ARRAY[
+    '기대 이상으로 만족스럽습니다. 소재도 훌륭하고 디자인도 세련되어서 받자마자 착용했어요.',
+    '배송도 빠르고 포장도 정성스러웠어요. 품질이 정말 최상급입니다. 강력 추천!',
+    '선물용으로 구매했는데 받은 분도 너무 좋아하셨어요. 역시 벙딸리제는 믿고 살 수 있네요.',
+    '가격 대비 퀄리티가 훌륭합니다. 실제로 보면 더 고급스러워 보여요.',
+    '처음 구매해봤는데 이제 단골이 될 것 같아요. 다음에 또 주문할 예정입니다.',
+    '색감이 사진과 동일하고 착용감도 편안합니다. 재구매 의사 100%입니다.',
+    '좋은 제품이지만 배송이 조금 늦었어요. 제품 자체는 매우 만족합니다.',
+    '명품 못지않은 퀄리티인데 가격이 합리적이에요. 친구들도 다들 어디서 샀냐고 물어봐요.',
+    '소재가 정말 부드럽고 고급스럽습니다. 다양한 스타일에 매치하기 좋아요.',
+    '특별한 날을 위해 구매했는데 정말 완벽했어요. 많은 분들께 추천드립니다.'
+  ];
+  v_ratings    INTEGER[] := ARRAY[5, 5, 5, 4, 5, 4, 3, 5, 5, 4];
+  i            INTEGER;
+BEGIN
+  SELECT ARRAY_AGG(id ORDER BY id) INTO v_member_ids FROM members WHERE role = 'ROLE_USER' LIMIT 3;
+  SELECT ARRAY_AGG(id ORDER BY id) INTO v_item_ids   FROM items LIMIT 10;
+
+  IF array_length(v_member_ids, 1) > 0 AND array_length(v_item_ids, 1) > 0 THEN
+    FOR i IN 1..10 LOOP
+      INSERT INTO reviews (member_id, item_id, rating, content, created_at)
+      VALUES (
+        v_member_ids[1 + ((i - 1) % array_length(v_member_ids, 1))],
+        v_item_ids  [1 + ((i - 1) % array_length(v_item_ids,   1))],
+        v_ratings[i],
+        v_contents[i],
+        NOW() - ((i * 5) || ' days')::INTERVAL
+      );
+    END LOOP;
+  END IF;
+END $$;
+
+-- ============================================================
+-- 16. 1:1 문의 샘플 데이터
+-- ============================================================
+DO $$
+DECLARE
+  v_member_ids   INTEGER[];
+  v_titles       TEXT[] := ARRAY[
+    '주문한 스카프 배송 조회 문의',
+    '향수 교환 요청드립니다',
+    '가방 색상 문의드립니다',
+    '회원 등급 기준이 궁금합니다',
+    '선물 포장 서비스 이용 방법 문의'
+  ];
+  v_contents     TEXT[] := ARRAY[
+    '3일 전에 주문했는데 아직 배송 출발 안 한 것 같아서요. 배송 현황을 확인해주실 수 있을까요?',
+    '어제 받은 향수에서 다른 향이 나는 것 같은데 교환 가능한가요? 개봉을 했지만 제품 불량 같습니다.',
+    '홈페이지에서 보이는 베이지 색상이 실물과 차이가 많이 있나요? 구매 전에 확인하고 싶습니다.',
+    '이번 달에 구매를 꽤 했는데 등급이 아직 SAPPHIRE인데 언제 업그레이드 되나요?',
+    '어머니 생신 선물로 구매하려는데 선물 포장 옵션은 주문할 때 어디서 선택하나요?'
+  ];
+  v_answers      TEXT[] := ARRAY[
+    '안녕하세요. 현재 물류센터 사정으로 발송이 1-2일 지연되고 있습니다. 내일 발송 예정이며 송장번호는 발송 후 문자로 안내드립니다. 불편을 드려 죄송합니다.',
+    NULL,
+    '실물 색상은 모니터 환경에 따라 조금씩 달라 보일 수 있으나 베이지 계열 색상으로 거의 동일합니다. 추가로 궁금하신 점은 언제든지 문의해주세요.',
+    NULL,
+    '주문 시 "요청사항" 입력란에 선물 포장 요청을 남겨주시면 됩니다. 별도 비용 없이 예쁘게 포장해드립니다.'
+  ];
+  i              INTEGER;
+BEGIN
+  SELECT ARRAY_AGG(id ORDER BY id) INTO v_member_ids FROM members WHERE role = 'ROLE_USER' LIMIT 3;
+
+  IF array_length(v_member_ids, 1) > 0 THEN
+    FOR i IN 1..5 LOOP
+      INSERT INTO inquiries (member_id, category, title, content, answer_content, is_answered, created_at, answered_at)
+      VALUES (
+        v_member_ids[1 + ((i - 1) % array_length(v_member_ids, 1))],
+        CASE (i % 3)
+          WHEN 0 THEN '주문/배송'
+          WHEN 1 THEN '상품'
+          ELSE '회원'
+        END,
+        v_titles[i],
+        v_contents[i],
+        v_answers[i],
+        CASE WHEN v_answers[i] IS NOT NULL THEN TRUE ELSE FALSE END,
+        NOW() - ((i * 3) || ' days')::INTERVAL,
+        CASE WHEN v_answers[i] IS NOT NULL THEN NOW() - ((i * 2) || ' days')::INTERVAL ELSE NULL END
+      );
+    END LOOP;
+  END IF;
+END $$;
+
+-- ============================================================
 -- 완료 메시지
 -- ============================================================
 SELECT '✅ Ventalize DB 초기화 완료!' AS message;

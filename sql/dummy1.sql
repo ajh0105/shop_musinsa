@@ -65,7 +65,7 @@ BEGIN
     VALUES (
       v_name,
       'user' || LPAD(i::TEXT, 3, '0') || '@ventalize.com',
-      '1234',
+      '$2b$10$TTidDYNE5ZFUiXRW95j7A.Hc6y56oaumE3/WEwqrSRxT4sjozgGGW',
       'ROLE_USER',
       v_grade,
       v_stat,
