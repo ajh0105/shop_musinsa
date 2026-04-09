@@ -112,7 +112,7 @@ const categoryLabels = {
   READY_TO_WEAR: 'Ready to Wear',
   PERFUME:       'Perfume',
   ACC:           'Accessories',
-  BAG:           'Bags',
+  BAGS:          'Bags',
   SALE:          'Sale',
   ALL:           'All Collections',
 }

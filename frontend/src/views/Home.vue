@@ -157,7 +157,7 @@
           <p class="t-sub" style="color:#7A7269; margin-bottom:10px">Bags</p>
           <h2 class="t-heading" style="margin-bottom:12px">Carry With<br>Intention</h2>
           <p class="t-body" style="color:#7A7269; margin-bottom:24px">이탈리안 레더부터 캔버스까지, 당신의 스타일을 완성하는 가방.</p>
-          <RouterLink to="/category/BAG" class="btn btn-primary">Shop Bags</RouterLink>
+          <RouterLink to="/category/BAGS" class="btn btn-primary">Shop Bags</RouterLink>
         </div>
       </div>
     </section>
@@ -260,7 +260,7 @@ const banners = [
     title: 'Carry\nStories',
     desc: '이탈리안 가죽으로 완성한 이번 시즌의 주인공',
     cta: 'Discover Bags',
-    link: '/category/BAG',
+    link: '/category/BAGS',
     align: 'left',
   },
 ]
@@ -274,7 +274,7 @@ const quickCats = [
   { name: 'READY_TO_WEAR', label: 'Ready to Wear' },
   { name: 'PERFUME',       label: 'Perfume'       },
   { name: 'ACC',           label: 'Accessories'   },
-  { name: 'BAG',           label: 'Bags'          },
+  { name: 'BAGS',          label: 'Bags'          },
   { name: 'SALE',          label: 'Sale'          },
 ]
 

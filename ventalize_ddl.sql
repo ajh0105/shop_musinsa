@@ -36,7 +36,7 @@ CREATE TABLE members (
 );
 
 -- ============================================================
--- 3. 상품 테이블 (카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAG / SALE은 뷰로 자동 구성)
+-- 3. 상품 테이블 (카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAGS / SALE은 뷰로 자동 구성)
 -- ============================================================
 CREATE TABLE items (
     id           SERIAL PRIMARY KEY,
@@ -242,24 +242,24 @@ INSERT INTO items (name, category, img_path, description, price, discount_per, s
 ('모자 울 베레모',             'ACC', 'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=600', '부드러운 울 소재의 클래식 베레모.', 88000, 0, 28),
 ('새틴 글러브',               'ACC', 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600', '우아한 새틴 소재의 엘보 길이 글러브.', 65000, 20, 20);
 
--- ── BAG (가방) ───────────────────────────────────────────
+-- ── BAGS (가방) ──────────────────────────────────────────
 INSERT INTO items (name, category, img_path, description, price, discount_per, stock_count) VALUES
-('레더 클래식 토트백',           'BAG', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '이탈리안 풀그레인 레더 소재의 클래식 토트백.', 585000, 0, 15),
-('스웨이드 미니 크로스백',        'BAG', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '부드러운 스웨이드 소재의 미니 크로스백.', 298000, 10, 20),
-('퀼팅 체인 숄더백',            'BAG', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '골드 체인 스트랩의 클래식 퀼팅 숄더백.', 425000, 0, 12),
-('캔버스 토트백 라지',           'BAG', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '내구성 좋은 캔버스 소재의 대용량 토트백.', 158000, 15, 35),
-('레더 클러치 골드',            'BAG', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '골드 하드웨어의 우아한 레더 클러치.', 245000, 0, 18),
-('버킷 백 소프트 레더',          'BAG', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '부드러운 나파 레더의 트렌디한 버킷 백.', 365000, 5, 10),
-('메쉬 미니 백팩',              'BAG', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '경량 메쉬 소재의 스타일리시 미니 백팩.', 228000, 0, 25),
-('새들 백 갈색',               'BAG', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '빈티지 감성의 클래식 새들 백.', 318000, 10, 15),
-('크로코 엠보 미니 백',          'BAG', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '악어가죽 패턴 엠보 소재의 미니 백.', 278000, 0, 20),
-('우븐 래피아 토트',            'BAG', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '여름 분위기 물씬 나는 래피아 우븐 토트백.', 175000, 0, 28),
-('탑핸들 박스 백',              'BAG', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '구조적인 박스 형태의 탑핸들 백.', 395000, 15, 8),
-('레더 파우치 멀티',            'BAG', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '수납력 좋은 레더 소재의 멀티 파우치.', 125000, 0, 40),
-('스트로 버킷 핸드백',           'BAG', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '천연 소재 스트로 버킷 핸드백. 여름 필수 아이템.', 185000, 10, 22),
-('미니 플랩 백 블랙',           'BAG', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '콤팩트한 사이즈의 플랩 클로저 미니 백.', 258000, 0, 18),
-('벨팅 숄더백 클래식',          'BAG', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '클래식한 벨팅 디테일의 레더 숄더백.', 445000, 0, 10),
-('나일론 크로스백 나이트',       'BAG', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '가볍고 실용적인 나일론 크로스백.', 148000, 20, 30);
+('레더 클래식 토트백',           'BAGS', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '이탈리안 풀그레인 레더 소재의 클래식 토트백.', 585000, 0, 15),
+('스웨이드 미니 크로스백',        'BAGS', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '부드러운 스웨이드 소재의 미니 크로스백.', 298000, 10, 20),
+('퀼팅 체인 숄더백',            'BAGS', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '골드 체인 스트랩의 클래식 퀼팅 숄더백.', 425000, 0, 12),
+('캔버스 토트백 라지',           'BAGS', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '내구성 좋은 캔버스 소재의 대용량 토트백.', 158000, 15, 35),
+('레더 클러치 골드',            'BAGS', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '골드 하드웨어의 우아한 레더 클러치.', 245000, 0, 18),
+('버킷 백 소프트 레더',          'BAGS', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '부드러운 나파 레더의 트렌디한 버킷 백.', 365000, 5, 10),
+('메쉬 미니 백팩',              'BAGS', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '경량 메쉬 소재의 스타일리시 미니 백팩.', 228000, 0, 25),
+('새들 백 갈색',               'BAGS', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '빈티지 감성의 클래식 새들 백.', 318000, 10, 15),
+('크로코 엠보 미니 백',          'BAGS', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '악어가죽 패턴 엠보 소재의 미니 백.', 278000, 0, 20),
+('우븐 래피아 토트',            'BAGS', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '여름 분위기 물씬 나는 래피아 우븐 토트백.', 175000, 0, 28),
+('탑핸들 박스 백',              'BAGS', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '구조적인 박스 형태의 탑핸들 백.', 395000, 15, 8),
+('레더 파우치 멀티',            'BAGS', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '수납력 좋은 레더 소재의 멀티 파우치.', 125000, 0, 40),
+('스트로 버킷 핸드백',           'BAGS', 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', '천연 소재 스트로 버킷 핸드백. 여름 필수 아이템.', 185000, 10, 22),
+('미니 플랩 백 블랙',           'BAGS', 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600', '콤팩트한 사이즈의 플랩 클로저 미니 백.', 258000, 0, 18),
+('벨팅 숄더백 클래식',          'BAGS', 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600', '클래식한 벨팅 디테일의 레더 숄더백.', 445000, 0, 10),
+('나일론 크로스백 나이트',       'BAGS', 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600', '가볍고 실용적인 나일론 크로스백.', 148000, 20, 30);
 
 -- ============================================================
 -- 13. SALE 뷰 (discount_per > 0 상품 자동 구성)

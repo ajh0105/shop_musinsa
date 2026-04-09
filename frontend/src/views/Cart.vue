@@ -88,7 +88,7 @@
           </div>
           <div class="v-summary-row">
             <span>Shipping</span>
-            <span>{{ totalPrice >= 100000 ? 'Complimentary' : '3,000원' }}</span>
+            <span>{{ totalPrice >= 50000 ? 'Complimentary' : '3,000원' }}</span>
           </div>
           <div class="v-summary-divider"></div>
           <div class="v-summary-row v-summary-row--total">
@@ -102,7 +102,7 @@
           >
             Place Order ({{ selectedItems.length }})
           </button>
-          <p class="v-summary-note t-caption">Complimentary shipping on orders over ₩100,000</p>
+          <p class="v-summary-note t-caption">Complimentary shipping on orders over ₩50,000</p>
         </div>
       </div>
     </div>
@@ -145,7 +145,7 @@ const totalPrice = computed(() =>
     .reduce((s, c) => s + (c.item?.salePrice || 0) * (c.quantity || 1), 0)
 )
 const finalPrice = computed(() =>
-  totalPrice.value + (totalPrice.value >= 100000 ? 0 : 3000)
+  totalPrice.value + (totalPrice.value >= 50000 ? 0 : 3000)
 )
 
 async function fetchCart() {

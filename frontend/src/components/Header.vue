@@ -3,7 +3,7 @@
 
     <!-- ── Announcement Bar ── -->
     <div class="v-header__announce">
-      <span>₩100,000 이상 구매 시 무료 배송 &nbsp;·&nbsp; 신규 회원 첫 구매 15% 할인</span>
+      <span>₩50,000 이상 구매 시 무료 배송 &nbsp;·&nbsp; 신규 회원 첫 구매 15% 할인</span>
     </div>
 
     <!-- ── Main Header ── -->
@@ -186,7 +186,7 @@ const categories = [
   { name: 'READY_TO_WEAR', label: 'Ready to Wear', to: '/category/READY_TO_WEAR' },
   { name: 'PERFUME',       label: 'Perfume',       to: '/category/PERFUME' },
   { name: 'ACC',           label: 'Accessories',   to: '/category/ACC' },
-  { name: 'BAG',           label: 'Bags',          to: '/category/BAG' },
+  { name: 'BAGS',          label: 'Bags',          to: '/category/BAGS' },
   { name: 'SALE',          label: 'Sale',          to: '/category/SALE' },
   { name: 'BOARD',         label: 'Board',         to: '/board' },
 ]

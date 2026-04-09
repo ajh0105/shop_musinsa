@@ -170,11 +170,11 @@ function toggleSort(field) {
   currentPage.value = 1
 }
 
-const categories = ['SCARVES', 'READY_TO_WEAR', 'PERFUME', 'ACC', 'BAG', 'SALE']
+const categories = ['SCARVES', 'READY_TO_WEAR', 'PERFUME', 'ACC', 'BAGS', 'SALE']
 const imageList  = ref([])
 
 const form = ref({ name: '', category: 'SCARVES', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' })
-// 카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAG, SALE
+// 카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAGS, SALE
 
 /* ── 필터 → 정렬 → 페이지 ── */
 const filteredProducts = computed(() => {
