@@ -28,7 +28,7 @@ services:
       SPRING_DATASOURCE_USERNAME: pgadmin
       SPRING_DATASOURCE_PASSWORD: 1004
     volumes:
-      - uploads_data:/app/uploads
+      - uploads_data:/app/images
     ports:
       - "8102:8102"
     depends_on:
