@@ -228,7 +228,7 @@ async function handleRegister() {
 /* Right aside */
 .v-auth-aside {
   position: relative;
-  background: url('/images/bags_banner.jpg') center/cover no-repeat;
+  background: url('/images/bags2_banner.png') center/cover no-repeat;
   overflow: hidden;
 }
 .v-auth-aside-overlay {

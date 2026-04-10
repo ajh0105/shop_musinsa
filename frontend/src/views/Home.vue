@@ -87,7 +87,7 @@
     ══════════════════════════════════════ -->
     <section class="v-promo-full">
       <div class="v-promo-full__img-wrap">
-        <img src="/images/perfume_banner.jpg" alt="Perfume Collection" />
+        <img src="/images/perfume_banner.png" alt="Perfume Collection" />
         <div class="v-promo-full__overlay"></div>
       </div>
       <div class="v-promo-full__body">
@@ -139,7 +139,7 @@
       <!-- Scarves -->
       <div class="v-split__panel">
         <div class="v-split__img-wrap">
-          <img src="/images/scarves3_banner.jpg" alt="Scarves" />
+          <img src="/images/scarves3_banner.png" alt="Scarves" />
         </div>
         <div class="v-split__body">
           <p class="t-sub" style="color:#7A7269; margin-bottom:10px">Scarves</p>
@@ -151,7 +151,7 @@
       <!-- Bags -->
       <div class="v-split__panel v-split__panel--reverse">
         <div class="v-split__img-wrap">
-          <img src="/images/bags2_banner.jpg" alt="Bags" />
+          <img src= "/images/bags2_banner.png" alt="Bags" />
         </div>
         <div class="v-split__body">
           <p class="t-sub" style="color:#7A7269; margin-bottom:10px">Bags</p>
@@ -170,7 +170,7 @@
         <RouterLink to="/category/SALE" class="v-sale-banner__inner">
           <div>
             <p class="t-sub" style="color:#B89C6E; margin-bottom:8px">Limited Time</p>
-            <h3 style="font-family:'EB Garamond',serif; font-size:1.8rem; font-weight:300; color:#fff; letter-spacing:0.05em">
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:#fff; letter-spacing:0.05em">
               시즌 오프 &mdash; 최대 50% 할인
             </h3>
           </div>
@@ -234,7 +234,7 @@ let timer   = null
 
 const banners = [
   {
-    img: './images/scarves_banner.jpg',
+    img: './images/scarves_banner.png',
     overlay: 'linear-gradient(90deg, rgba(27,58,45,0.72) 0%, rgba(27,58,45,0.1) 100%)',
     eyebrow: '2026 S/S Collection',
     title: 'The Art\nof Draping',
@@ -254,7 +254,7 @@ const banners = [
     align: 'right',
   },
   {
-    img: './images/bags_banner.jpg',
+    img: './images/bags_banner.png',
     overlay: 'linear-gradient(90deg, rgba(17,17,17,0.6) 0%, rgba(0,0,0,0.05) 100%)',
     eyebrow: 'Bags · New Season',
     title: 'Carry\nStories',

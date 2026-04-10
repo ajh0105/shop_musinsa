@@ -204,7 +204,7 @@ async function handleLogin() {
 /* Right aside */
 .v-auth-aside {
   position: relative;
-  background: url('/images/scarves_banner.jpg') center/cover no-repeat;
+  background: url('/images/bags2_banner.png') center/cover no-repeat;
   overflow: hidden;
 }
 .v-auth-aside-overlay {
