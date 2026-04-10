@@ -1,7 +1,6 @@
 <template>
   <div class="v-mypage">
 
-    <!-- Page header -->
     <div class="v-mypage-hero">
       <div class="v-container">
         <h1 class="v-mypage-hero-title t-display">My Account</h1>
@@ -12,9 +11,8 @@
     <div class="v-container">
       <div class="v-mypage-layout">
 
-        <!-- Sidebar -->
         <aside class="v-mypage-sidebar">
-          <!-- Avatar -->
+
           <div class="v-mypage-avatar-wrap">
             <div class="v-mypage-avatar">{{ (profile?.name || 'U')[0] }}</div>
             <div>
@@ -37,17 +35,15 @@
           </nav>
         </aside>
 
-        <!-- Main -->
         <main class="v-mypage-main">
 
-          <!-- Orders -->
           <section v-if="activeTab === 'orders'">
             <h2 class="v-mypage-section-title">Order History</h2>
             <div v-if="ordersLoading" class="v-spinner" style="margin:40px auto"></div>
             <p v-else-if="orders.length === 0" class="v-mypage-empty t-caption">No orders yet.</p>
             <div v-else class="v-order-list">
               <div v-for="order in orders" :key="order.id" class="v-order-card">
-                <!-- 요약 행 (항상 표시, 클릭으로 토글) -->
+
                 <div class="v-order-summary" @click="toggleOrder(order.id)">
                   <div class="v-order-summary-left">
                     <span class="v-order-num"># {{ order.orderNumber || order.id }}</span>
@@ -62,7 +58,6 @@
                   </div>
                 </div>
 
-                <!-- 상세 내용 (토글) -->
                 <div v-if="expandedOrderId === order.id" class="v-order-detail">
                   <div v-if="order.items && order.items.length > 0" class="v-order-items">
                     <div v-for="oi in order.items" :key="oi.itemId" class="v-order-item-row">
@@ -87,7 +82,6 @@
             </div>
           </section>
 
-          <!-- Reviews -->
           <section v-if="activeTab === 'reviews'">
             <h2 class="v-mypage-section-title">My Reviews</h2>
             <p v-if="reviews.length === 0" class="v-mypage-empty t-caption">No reviews written yet.</p>
@@ -103,7 +97,6 @@
             </div>
           </section>
 
-          <!-- Q&A -->
           <section v-if="activeTab === 'qna'">
             <h2 class="v-mypage-section-title">My Q&A</h2>
             <p v-if="questions.length === 0" class="v-mypage-empty t-caption">No questions written yet.</p>
@@ -126,7 +119,6 @@
             </div>
           </section>
 
-          <!-- Profile -->
           <section v-if="activeTab === 'profile'">
             <h2 class="v-mypage-section-title">Edit Profile</h2>
             <form class="v-profile-form" @submit.prevent="updateProfile">
@@ -157,7 +149,6 @@
             </form>
           </section>
 
-          <!-- Coupons -->
           <section v-if="activeTab === 'coupons'">
             <h2 class="v-mypage-section-title">My Coupons</h2>
             <p v-if="coupons.length === 0" class="v-mypage-empty t-caption">사용 가능한 쿠폰이 없습니다.</p>
@@ -180,7 +171,6 @@
             </div>
           </section>
 
-          <!-- Withdraw -->
           <section v-if="activeTab === 'withdraw'">
             <h2 class="v-mypage-section-title">Delete Account</h2>
             <div class="v-withdraw-box">
@@ -349,7 +339,6 @@ onMounted(() => {
 <style scoped>
 .v-mypage { min-height: 80vh; padding-bottom: 80px; }
 
-/* Hero */
 .v-mypage-hero {
   background: #F5F0E8;
   padding: 56px 0 40px;
@@ -365,7 +354,6 @@ onMounted(() => {
 }
 .v-mypage-hero-sub { color: #7A7269; }
 
-/* Layout */
 .v-mypage-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -374,7 +362,6 @@ onMounted(() => {
 }
 @media (max-width: 768px) { .v-mypage-layout { grid-template-columns: 1fr; } }
 
-/* Sidebar */
 .v-mypage-sidebar { position: sticky; top: 100px; }
 
 .v-mypage-avatar-wrap {
@@ -400,7 +387,6 @@ onMounted(() => {
 }
 .v-mypage-avatar-name { font-size: 0.85rem; font-weight: 500; color: #111; margin-bottom: 4px; }
 
-/* Grade badge */
 .v-grade-badge {
   font-size: 0.6rem;
   font-weight: 700;
@@ -413,7 +399,6 @@ onMounted(() => {
 .v-grade--gold    { background: rgba(184,156,110,0.15); color: #B89C6E; }
 .v-grade--vip     { background: rgba(27,58,45,0.1);   color: #1B3A2D; }
 
-/* Nav */
 .v-mypage-nav { display: flex; flex-direction: column; gap: 0; }
 .v-mypage-nav-btn {
   background: none;
@@ -433,7 +418,6 @@ onMounted(() => {
 .v-mypage-nav-btn--logout { color: #C9B89A; margin-top: 16px; }
 .v-mypage-nav-btn--logout:hover { color: #8B2020; }
 
-/* Main section */
 .v-mypage-section-title {
   font-family: var(--font-serif);
   font-size: 1.6rem;
@@ -445,7 +429,6 @@ onMounted(() => {
 }
 .v-mypage-empty { color: #C9B89A; padding: 40px 0; }
 
-/* Orders */
 .v-order-list { display: flex; flex-direction: column; gap: 12px; }
 .v-order-card { border: 1px solid #E8E2D9; }
 .v-order-summary {
@@ -488,7 +471,6 @@ onMounted(() => {
 }
 .v-btn-cancel:hover { border-color: #8B2020; color: #8B2020; }
 
-/* Reviews */
 .v-review-list { display: flex; flex-direction: column; }
 .v-review-item { padding: 20px 0; border-bottom: 1px solid #E8E2D9; }
 .v-review-meta { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
@@ -496,7 +478,6 @@ onMounted(() => {
 .v-review-date { color: #C9B89A; }
 .v-review-body { color: #555; font-size: 0.9rem; line-height: 1.7; }
 
-/* QnA */
 .v-qna-list { display: flex; flex-direction: column; }
 .v-qna-item { padding: 20px 0; border-bottom: 1px solid #E8E2D9; }
 .v-qna-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -527,7 +508,6 @@ onMounted(() => {
 }
 .v-btn-del:hover { color: #8B2020; }
 
-/* Profile form */
 .v-profile-form { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
 .v-field { display: flex; flex-direction: column; gap: 8px; }
 .v-field-label {
@@ -569,7 +549,6 @@ onMounted(() => {
 }
 .v-btn-save:hover { background: #4A6741; }
 
-/* Coupons */
 .v-coupon-list { display: flex; flex-direction: column; gap: 12px; }
 .v-coupon-card {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -588,7 +567,6 @@ onMounted(() => {
 .v-coupon-validity { color: #C9B89A; margin-bottom: 4px; }
 .v-coupon-min { color: #C9B89A; margin-bottom: 6px; }
 
-/* Withdraw */
 .v-withdraw-box { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
 .v-withdraw-warn {
   font-size: 0.85rem;

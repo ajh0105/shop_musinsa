@@ -2,13 +2,11 @@
   <div class="admin-page">
     <h1 class="admin-page-title">상품 관리</h1>
 
-    <!-- ── 툴바 ── -->
     <div class="admin-toolbar products-toolbar">
-      <!-- 검색 -->
+
       <input v-model="keyword" class="admin-search-input" placeholder="상품명 검색"
         @keyup.enter="applyFilter" @input="applyFilter" />
 
-      <!-- 카테고리 필터 -->
       <select v-model="categoryFilter" class="admin-form-select filter-select" @change="applyFilter">
         <option value="">전체 카테고리</option>
         <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
@@ -20,7 +18,6 @@
       </div>
     </div>
 
-    <!-- ── 테이블 ── -->
     <div class="admin-card">
       <div v-if="loading" class="loading-box"><div class="spinner"></div></div>
       <table v-else class="admin-table">
@@ -62,7 +59,6 @@
       </table>
     </div>
 
-    <!-- ── 페이지네이션 ── -->
     <div v-if="totalPages > 1" class="admin-pagination">
       <button class="pg-btn" :disabled="currentPage === 1" @click="currentPage = 1">«</button>
       <button class="pg-btn" :disabled="currentPage === 1" @click="currentPage--">‹</button>
@@ -78,7 +74,6 @@
       <span class="pg-info">{{ currentPage }} / {{ totalPages }}</span>
     </div>
 
-    <!-- ── 상품 등록/수정 모달 ── -->
     <div v-if="showModal" class="admin-modal-overlay" @click.self="showModal = false">
       <div class="admin-modal" style="max-width:600px">
         <h3 class="admin-modal-title">{{ editTarget ? '상품 수정' : '상품 등록' }}</h3>
@@ -145,7 +140,7 @@ import { ref, computed, onMounted } from 'vue'
 
 const ITEMS_PER_PAGE = 10
 
-const allProducts = ref([])   // 서버에서 받은 원본
+const allProducts = ref([])
 const loading     = ref(false)
 const showModal   = ref(false)
 const editTarget  = ref(null)
@@ -153,11 +148,10 @@ const toast       = ref('')
 const uploading   = ref(false)
 const fileInput   = ref(null)
 
-// 필터 / 정렬
 const keyword        = ref('')
 const categoryFilter = ref('')
 const sortField      = ref('id')
-const sortAsc        = ref(false)   // 기본 내림차순
+const sortAsc        = ref(false)
 const currentPage    = ref(1)
 
 function toggleSort(field) {
@@ -174,9 +168,7 @@ const categories = ['SCARVES', 'READY_TO_WEAR', 'PERFUME', 'ACC', 'BAGS', 'SALE'
 const imageList  = ref([])
 
 const form = ref({ name: '', category: 'SCARVES', description: '', price: 0, discountPer: 0, stockCount: 0, imgPath: '' })
-// 카테고리: SCARVES, READY_TO_WEAR, PERFUME, ACC, BAGS, SALE
 
-/* ── 필터 → 정렬 → 페이지 ── */
 const filteredProducts = computed(() => {
   let list = allProducts.value
   if (categoryFilter.value) {
@@ -206,7 +198,6 @@ const pagedProducts = computed(() => {
   return sortedProducts.value.slice(start, start + ITEMS_PER_PAGE)
 })
 
-// 슬라이딩 윈도우 페이지 번호 (최대 5개)
 const pageNumbers = computed(() => {
   const total = totalPages.value
   const cur   = currentPage.value
@@ -218,10 +209,8 @@ const pageNumbers = computed(() => {
   return nums
 })
 
-// 필터 변경 시 페이지 초기화
 function applyFilter() { currentPage.value = 1 }
 
-/* ── API ── */
 async function loadProducts() {
   loading.value = true
   try {
@@ -294,12 +283,10 @@ onMounted(() => { loadProducts(); loadImageList() })
 </script>
 
 <style scoped>
-/* ── 헤더 정렬 ── */
 .sortable-th { cursor: pointer; user-select: none; white-space: nowrap; }
 .sortable-th:hover { background: #F3F4F6; }
 .sort-icon { font-size: 0.7rem; color: #9CA3AF; margin-left: 4px; }
 
-/* ── 툴바 ── */
 .products-toolbar {
   flex-wrap: wrap;
   gap: 8px;
@@ -322,7 +309,6 @@ onMounted(() => { loadProducts(); loadImageList() })
   white-space: nowrap;
 }
 
-/* ── 썸네일 / 재고 입력 ── */
 .product-thumb {
   width: 44px; height: 44px; object-fit: cover;
   border-radius: 6px; border: 1px solid #E5E7EB;
@@ -332,7 +318,6 @@ onMounted(() => { loadProducts(); loadImageList() })
   padding: 4px 6px; font-size: 0.8rem; text-align: center;
 }
 
-/* ── 페이지네이션 ── */
 .admin-pagination {
   display: flex;
   align-items: center;
@@ -360,7 +345,6 @@ onMounted(() => { loadProducts(); loadImageList() })
   margin-left: 8px;
 }
 
-/* ── 이미지 업로드 ── */
 .img-upload-row {
   display: flex; align-items: center; gap: 12px; margin-bottom: 4px;
 }
