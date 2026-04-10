@@ -44,7 +44,7 @@
         <div class="v-cart-items">
           <div class="v-cart-items-header">
             <label class="v-cart-check-all">
-              <input type="checkbox" v-model="allSelected" @change="toggleAll" />
+              <input type="checkbox" :checked="allSelected" @change="toggleAll" />
               <span class="t-caption">Select All ({{ selectedItems.length }}/{{ cartItems.length }})</span>
             </label>
             <button class="v-cart-del-sel" @click="removeSelected">Remove Selected</button>
@@ -122,7 +122,9 @@ const { isLoggedIn } = useAuth()
 const loading      = ref(false)
 const cartItems    = ref([])
 const selectedItems = ref([])
-const allSelected  = ref(false)
+const allSelected  = computed(
+  () => cartItems.value.length > 0 && selectedItems.value.length === cartItems.value.length
+)
 const toastMsg     = ref('')
 
 function showToast(msg) {
@@ -135,8 +137,8 @@ function fmtPrice(p) {
   return p.toLocaleString('ko-KR') + '원'
 }
 
-function toggleAll() {
-  selectedItems.value = allSelected.value ? cartItems.value.map(c => c.itemId) : []
+function toggleAll(e) {
+  selectedItems.value = e.target.checked ? cartItems.value.map(c => c.itemId) : []
 }
 
 const totalPrice = computed(() =>
@@ -156,7 +158,6 @@ async function fetchCart() {
     if (!res.ok) { cartItems.value = []; return }
     cartItems.value = await res.json()
     selectedItems.value = cartItems.value.map(c => c.itemId)
-    allSelected.value = true
   } catch (e) {
     console.error(e)
   } finally {
