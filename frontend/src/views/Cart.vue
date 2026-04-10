@@ -219,7 +219,7 @@ onMounted(fetchCart)
 .v-breadcrumb__sep { color: #C9B89A; font-size: 0.7rem; }
 .v-breadcrumb__current { font-size: 0.72rem; color: #1B3A2D; font-weight: 500; }
 .v-cart-title {
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-family: var(--font-serif);
   font-size: 2.2rem;
   font-weight: 400;
   color: #111;

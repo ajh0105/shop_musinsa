@@ -120,7 +120,7 @@
   gap: 2px;
 }
 .vad-brand-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
   font-size: 1.05rem;
   font-weight: 400;
   letter-spacing: 0.28em;

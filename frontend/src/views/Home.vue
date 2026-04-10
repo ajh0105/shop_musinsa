@@ -87,11 +87,11 @@
     ══════════════════════════════════════ -->
     <section class="v-promo-full">
       <div class="v-promo-full__img-wrap">
-        <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1400&q=80" alt="Perfume Collection" />
+        <img src="/images/perfume_banner.jpg" alt="Perfume Collection" />
         <div class="v-promo-full__overlay"></div>
       </div>
       <div class="v-promo-full__body">
-        <p class="t-sub" style="color:#C9B89A; margin-bottom:16px">Fragrance · 2025 Collection</p>
+        <p class="t-sub" style="color:#C9B89A; margin-bottom:16px">Fragrance · 2026 Collection</p>
         <h2 class="t-display" style="color:#F5F0E8; margin-bottom:20px">The Art of<br>Invisible Luxury</h2>
         <p style="color:rgba(245,240,232,0.7); font-size:0.9rem; margin-bottom:32px; max-width:400px; line-height:1.8">
           향수는 가장 보이지 않는 럭셔리입니다.<br>벙딸리제의 향수 컬렉션을 만나보세요.
@@ -139,7 +139,7 @@
       <!-- Scarves -->
       <div class="v-split__panel">
         <div class="v-split__img-wrap">
-          <img src="https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=800&q=80" alt="Scarves" />
+          <img src="/images/scarves3_banner.jpg" alt="Scarves" />
         </div>
         <div class="v-split__body">
           <p class="t-sub" style="color:#7A7269; margin-bottom:10px">Scarves</p>
@@ -151,7 +151,7 @@
       <!-- Bags -->
       <div class="v-split__panel v-split__panel--reverse">
         <div class="v-split__img-wrap">
-          <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80" alt="Bags" />
+          <img src="/images/bags2_banner.jpg" alt="Bags" />
         </div>
         <div class="v-split__body">
           <p class="t-sub" style="color:#7A7269; margin-bottom:10px">Bags</p>
@@ -170,7 +170,7 @@
         <RouterLink to="/category/SALE" class="v-sale-banner__inner">
           <div>
             <p class="t-sub" style="color:#B89C6E; margin-bottom:8px">Limited Time</p>
-            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:#fff; letter-spacing:0.05em">
+            <h3 style="font-family:'EB Garamond',serif; font-size:1.8rem; font-weight:300; color:#fff; letter-spacing:0.05em">
               시즌 오프 &mdash; 최대 50% 할인
             </h3>
           </div>
@@ -234,9 +234,9 @@ let timer   = null
 
 const banners = [
   {
-    img: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&q=80',
+    img: './images/scarves_banner.jpg',
     overlay: 'linear-gradient(90deg, rgba(27,58,45,0.72) 0%, rgba(27,58,45,0.1) 100%)',
-    eyebrow: '2025 S/S Collection',
+    eyebrow: '2026 S/S Collection',
     title: 'The Art\nof Draping',
     desc: '실크 스카프 하나로 완성되는 우아함',
     cta: 'Explore Scarves',
@@ -254,7 +254,7 @@ const banners = [
     align: 'right',
   },
   {
-    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1600&q=80',
+    img: './images/bags_banner.jpg',
     overlay: 'linear-gradient(90deg, rgba(17,17,17,0.6) 0%, rgba(0,0,0,0.05) 100%)',
     eyebrow: 'Bags · New Season',
     title: 'Carry\nStories',
