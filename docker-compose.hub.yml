@@ -1,0 +1,48 @@
+services:
+
+  db:
+    image: postgres:14-alpine
+    container_name: ventalize-db
+    environment:
+      POSTGRES_DB: ventalize
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: 1004
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./ventalize_ddl.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgadmin -d ventalize"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: DOCKERHUB_ID/ventalize-backend:1.0
+    container_name: ventalize-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ventalize
+      SPRING_DATASOURCE_USERNAME: pgadmin
+      SPRING_DATASOURCE_PASSWORD: 1004
+    volumes:
+      - uploads_data:/app/images
+    ports:
+      - "8102:8102"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: DOCKERHUB_ID/ventalize-frontend:1.0
+    container_name: ventalize-frontend
+    volumes:
+      - ./frontend/public/images:/usr/share/nginx/html/images
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  uploads_data:
