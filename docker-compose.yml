@@ -40,6 +40,8 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     container_name: ventalize-frontend
+    volumes:
+      - ./frontend/public/images:/usr/share/nginx/html/images
     ports:
       - "80:80"
     depends_on:
