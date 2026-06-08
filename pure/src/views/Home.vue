@@ -42,6 +42,8 @@
             @click="goToSlide(i)"
           />
         </div>
+
+        <div class="banner-counter">{{ String(currentSlide + 1).padStart(2, '0') }} / {{ String(banners.length).padStart(2, '0') }}</div>
       </div>
     </section>
 
@@ -75,8 +77,11 @@
     <section class="hit-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">신상품</h2>
-          <p class="section-sub">새로 입고된 아이템</p>
+          <div class="section-title-group">
+            <span class="section-eyebrow">— 01 NEW ARRIVAL</span>
+            <h2 class="section-title">신상품</h2>
+          </div>
+          <RouterLink to="/category/ALL" class="section-more">ALL VIEW →</RouterLink>
         </div>
         <div v-if="newLoading" class="loading-box"><div class="spinner"></div></div>
         <div v-else class="product-row">
@@ -103,21 +108,25 @@
     <section class="hit-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">베스트</h2>
-          <p class="section-sub">지금 가장 인기 있는 아이템</p>
+          <div class="section-title-group">
+            <span class="section-eyebrow">— 02 BEST SELLER</span>
+            <h2 class="section-title">베스트</h2>
+          </div>
+          <RouterLink to="/category/ALL" class="section-more">ALL VIEW →</RouterLink>
         </div>
         <div v-if="loading" class="loading-box">
           <div class="spinner"></div>
         </div>
         <div v-else class="product-row">
           <RouterLink
-            v-for="item in hitItems"
+            v-for="(item, idx) in hitItems"
             :key="item.id"
             :to="`/product/${item.id}`"
             class="product-card product-card--sm"
           >
             <div class="product-img-wrap">
               <img :src="item.imgPath" :alt="item.name" class="product-img" loading="lazy" @error="onImgError" />
+              <span class="product-rank">{{ idx + 1 }}</span>
               <span v-if="item.discountPer > 0" class="product-badge">{{ item.discountPer }}%</span>
               <span v-if="item.isSoldOut" class="product-badge product-badge--soldout">품절</span>
             </div>
@@ -136,11 +145,14 @@
     </section>
 
     <!-- 추천 상품 -->
-    <section class="hit-section" style="background:#f8f8f8;">
+    <section class="hit-section" style="background:#f5f5f5;">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">추천 상품</h2>
-          <p class="section-sub">할인율이 높은 인기 아이템</p>
+          <div class="section-title-group">
+            <span class="section-eyebrow">— 03 EDITOR'S PICK</span>
+            <h2 class="section-title">추천 상품</h2>
+          </div>
+          <RouterLink to="/category/ALL" class="section-more">ALL VIEW →</RouterLink>
         </div>
         <div v-if="recLoading" class="loading-box"><div class="spinner"></div></div>
         <div v-else class="product-row">
@@ -167,8 +179,11 @@
     <section class="category-row-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">아우터 추천</h2>
-          <RouterLink to="/category/OUTER" class="section-more">더보기 →</RouterLink>
+          <div class="section-title-group">
+            <span class="section-eyebrow">— 04 CATEGORY</span>
+            <h2 class="section-title">아우터 추천</h2>
+          </div>
+          <RouterLink to="/category/OUTER" class="section-more">ALL VIEW →</RouterLink>
         </div>
         <div v-if="outerLoading" class="loading-box"><div class="spinner"></div></div>
         <div v-else class="product-row">
@@ -215,8 +230,11 @@
     <section class="category-row-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">신발 추천</h2>
-          <RouterLink to="/category/SHOES" class="section-more">더보기 →</RouterLink>
+          <div class="section-title-group">
+            <span class="section-eyebrow">— 05 CATEGORY</span>
+            <h2 class="section-title">신발 추천</h2>
+          </div>
+          <RouterLink to="/category/SHOES" class="section-more">ALL VIEW →</RouterLink>
         </div>
         <div v-if="shoesLoading" class="loading-box"><div class="spinner"></div></div>
         <div v-else class="product-row">

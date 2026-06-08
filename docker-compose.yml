@@ -1,0 +1,138 @@
+services:
+
+  # ──────────────────────────────────────────────
+  # PostgreSQL (무신사 + 아뜨랑스 공용)
+  # ──────────────────────────────────────────────
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1004
+      POSTGRES_DB: shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d
+      - ./shop_musinsa:/musinsa_sql:ro
+      - ./shop_attrangs/shop_attrangs:/attrangs_sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ──────────────────────────────────────────────
+  # 무신사 백엔드 (Spring Boot, port 8085)
+  # ──────────────────────────────────────────────
+  musinsa-backend:
+    build:
+      context: ./shop_musinsa/shop
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shop
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1004
+    ports:
+      - "8085:8085"
+    volumes:
+      - musinsa_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+
+  # ──────────────────────────────────────────────
+  # 무신사 프론트엔드 (Vue3 + Nginx, port 3000)
+  # ──────────────────────────────────────────────
+  musinsa-frontend:
+    build:
+      context: ./pure
+    ports:
+      - "3000:80"
+    depends_on:
+      - musinsa-backend
+
+  # ──────────────────────────────────────────────
+  # 아뜨랑스 백엔드 (Spring Boot, port 8086)
+  # ──────────────────────────────────────────────
+  attrangs-backend:
+    build:
+      context: ./shop_attrangs/shop_attrangs/shop
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shop_attrangs
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1004
+    ports:
+      - "8086:8086"
+    volumes:
+      - attrangs_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+
+  # ──────────────────────────────────────────────
+  # 아뜨랑스 프론트엔드 (Vue3 + Nginx, port 3001)
+  # ──────────────────────────────────────────────
+  attrangs-frontend:
+    build:
+      context: ./shop_attrangs/frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - attrangs-backend
+
+  # ──────────────────────────────────────────────
+  # 무신사 DB 시더 (JPA 테이블 생성 후 회원/리뷰 데이터 삽입)
+  # ──────────────────────────────────────────────
+  musinsa-db-seeder:
+    image: postgres:14-alpine
+    volumes:
+      - ./shop_musinsa:/sql:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: "1004"
+    command: >
+      sh -c "
+        echo '[musinsa seeder] members 테이블 대기 중...' &&
+        until psql -h postgres -U postgres -d shop -c 'SELECT 1 FROM members LIMIT 1' > /dev/null 2>&1; do
+          sleep 5
+        done &&
+        echo '[musinsa seeder] 시드 데이터 삽입 시작' &&
+        psql -h postgres -U postgres -d shop -f /sql/musinsa_ddl1.sql > /dev/null 2>&1 || true &&
+        psql -h postgres -U postgres -d shop -f /sql/musinsa_ddl2.sql > /dev/null 2>&1 || true &&
+        echo '[musinsa seeder] 완료'
+      "
+    restart: "no"
+
+  # ──────────────────────────────────────────────
+  # 아뜨랑스 DB 시더
+  # ──────────────────────────────────────────────
+  attrangs-db-seeder:
+    image: postgres:14-alpine
+    volumes:
+      - ./shop_attrangs/shop_attrangs:/sql:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: "1004"
+    command: >
+      sh -c "
+        echo '[attrangs seeder] members 테이블 대기 중...' &&
+        until psql -h postgres -U postgres -d shop_attrangs -c 'SELECT 1 FROM members LIMIT 1' > /dev/null 2>&1; do
+          sleep 5
+        done &&
+        echo '[attrangs seeder] 시드 데이터 삽입 시작' &&
+        psql -h postgres -U postgres -d shop_attrangs -f /sql/attrangs_ddl1.sql > /dev/null 2>&1 || true &&
+        psql -h postgres -U postgres -d shop_attrangs -f /sql/attrangs_ddl2.sql > /dev/null 2>&1 || true &&
+        echo '[attrangs seeder] 완료'
+      "
+    restart: "no"
+
+volumes:
+  postgres_data:
+  musinsa_uploads:
+  attrangs_uploads:

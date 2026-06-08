@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header">
+  <header class="site-header" :class="{ 'site-header--scrolled': isScrolled }">
     <!-- 상단 유틸리티 바 -->
     <div class="header-top">
       <div class="header-top-inner">
@@ -21,12 +21,10 @@
     <!-- 메인 헤더 -->
     <div class="header-main">
       <div class="header-main-inner">
-        <!-- 로고 -->
         <RouterLink to="/" class="header-logo">
           <span class="logo-text">MUSINSA</span>
         </RouterLink>
 
-        <!-- 검색 -->
         <div class="header-search">
           <form class="search-form" @submit.prevent="handleSearch">
             <input
@@ -36,24 +34,23 @@
               class="search-input"
             />
             <button type="submit" class="search-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
             </button>
           </form>
         </div>
 
-        <!-- 우측 아이콘 메뉴 -->
         <div class="header-icons">
           <RouterLink to="/mypage" class="icon-btn">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
             <span>MY</span>
           </RouterLink>
-          <RouterLink to="/cart" class="icon-btn cart-icon-btn">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <RouterLink to="/cart" class="icon-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
@@ -78,8 +75,8 @@
           {{ cat.label }}
         </RouterLink>
         <span class="nav-divider">|</span>
-        <RouterLink to="/faq" class="nav-link nav-link--board" active-class="nav-link--active">FAQ</RouterLink>
-        <RouterLink to="/board" class="nav-link nav-link--board" active-class="nav-link--active">고객문의</RouterLink>
+        <RouterLink to="/faq"     class="nav-link nav-link--board" active-class="nav-link--active">FAQ</RouterLink>
+        <RouterLink to="/board"   class="nav-link nav-link--board" active-class="nav-link--active">고객문의</RouterLink>
         <RouterLink to="/reviews" class="nav-link nav-link--board" active-class="nav-link--active">전체리뷰</RouterLink>
       </div>
     </nav>
@@ -87,13 +84,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 
-const { isLoggedIn, loginId, userName, role, isAdmin, clearLogin } = useAuth()
+const { isLoggedIn, loginId, userName, isAdmin, clearLogin } = useAuth()
 const router = useRouter()
 const searchQuery = ref('')
+const isScrolled = ref(false)
+
+function onScroll() {
+  isScrolled.value = window.scrollY > 20
+}
+
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 function handleSearch() {
   if (searchQuery.value.trim()) {
@@ -103,12 +108,12 @@ function handleSearch() {
 
 const categories = [
   { name: 'OUTER', label: 'OUTER' },
-  { name: 'TOP', label: 'TOP' },
+  { name: 'TOP',   label: 'TOP'   },
   { name: 'PANTS', label: 'PANTS' },
   { name: 'SHOES', label: 'SHOES' },
-  { name: 'BAG', label: 'BAG' },
-  { name: 'ACC', label: 'ACC' },
-  { name: 'OUTLET', label: 'OUTLET' },
+  { name: 'BAG',   label: 'BAG'   },
+  { name: 'ACC',   label: 'ACC'   },
+  { name: 'OUTLET',label: 'OUTLET'},
 ]
 
 async function handleLogout() {
